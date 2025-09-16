@@ -7,15 +7,16 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground px-4 py-12">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background dark:bg-background text-foreground px-4 py-12">
+
       <div className="max-w-xl text-center">
         {/* Phần chữ 'Oops!' lớn với hiệu ứng gradient/vũ trụ */}
         <h1 
           className="text-7xl sm:text-8xl md:text-9xl font-extrabold mb-6 
-                     bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+                     bg-gradient-to-r from-primary via-accent to-primary-hover
                      text-transparent bg-clip-text animate-gradient-shift"
         >
-          Oops!
+          Something went wrong!
         </h1>
 
         {/* Thông báo 404 */}

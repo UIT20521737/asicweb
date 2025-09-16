@@ -1,32 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "@/app/globals.css";
-import Header from '@/components/Header'
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// src/app/(main)/layout.js
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Header from '@/components/Header';
 
-export const metadata = {
-  title: "ASICLab - UIT",
-  description: "The Application-Specific Integrated Circuit (ASIC) Design and Research Laboratory at the University of Information Technology - VNU-HCM.",
-};
-
+// Đây là Layout Con, nó chỉ chứa các thành phần UI
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div>
-          <Header/>
-          {children}
-        </div>
-      </body>
-    </html>
+    // Dùng một div hoặc React Fragment để bao bọc
+    <div className="flex flex-col min-h-screen bg-muted">
+      <Header />
+      <main className="flex-grow pt-16">
+        {children}
+      </main>
+      {/* <Footer /> có thể thêm ở đây */}
+    </div>
   );
 }
