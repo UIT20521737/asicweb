@@ -51,78 +51,51 @@ const publicationsData = [
 
 const Publications = ({ publications = publicationsData }) => {
   return (
-    <section style={{
-      padding: '4rem 2rem',
-      backgroundColor: '#f9fafb',
-      textAlign: 'center',
-    }}>
-      <h2 style={{
-        fontSize: '2.5rem',
-        fontWeight: 700,
-        color: '#1f2937',
-        marginBottom: '2rem',
-      }}>Published Papers</h2>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '2rem',
-        maxWidth: '1200px',
-        margin: '0 auto',
-      }}>
-        {publications.slice(0, 5).map((pub) => (
-          <div key={pub.id} style={{
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            transition: 'transform 0.3s ease',
-          }}>
-            <h3 style={{
-              fontSize: '1.25rem',
-              fontWeight: 600,
-              color: '#1f2937',
-              marginBottom: '0.5rem',
-            }}>{pub.title}</h3>
-            <p style={{
-              fontSize: '1rem',
-              color: '#4b5563',
-              margin: '0.25rem 0',
-            }}>Authors: {pub.authors}</p>
-            <p style={{
-              fontSize: '1rem',
-              color: '#4b5563',
-              margin: '0.25rem 0',
-            }}>Journal: {pub.journal}</p>
-            <p style={{
-              fontSize: '1rem',
-              color: '#4b5563',
-              margin: '0.25rem 0',
-            }}>Year: {pub.year}</p>
-            <p style={{
-              fontSize: '1rem',
-              color: '#4b5563',
-              margin: '0.25rem 0',
-            }}>
-              DOI: <a href={pub.link} target="_blank" rel="noopener noreferrer" style={{
-                color: '#2563eb',
-                textDecoration: 'none',
-              }}>{pub.doi}</a>
-            </p>
-          </div>
-        ))}
-      </div>
-      <div style={{
-        marginTop: '2rem',
-      }}>
-        <Link href="/publications" style={{
-          padding: '0.75rem 1.5rem',
-          backgroundColor: '#2563eb',
-          color: '#ffffff',
-          borderRadius: '4px',
-          textDecoration: 'none',
-          fontSize: '1rem',
-          fontWeight: 500,
-        }}>View More</Link>
+    <section className="py-16 bg-gray-50 dark:bg-gray-900 text-center">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          Published Papers
+        </h2>
+        <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {publications.slice(0, 5).map((pub) => (
+            <div
+              key={pub.id}
+              className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+            >
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                {pub.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                <span className="font-medium">Authors:</span> {pub.authors}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                <span className="font-medium">Journal:</span> {pub.journal}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                <span className="font-medium">Year:</span> {pub.year}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <span className="font-medium">DOI:</span>{" "}
+                <a
+                  href={pub.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  {pub.doi}
+                </a>
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10">
+          <Link
+            href="/publications"
+            className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-300"
+          >
+            View More
+          </Link>
+        </div>
       </div>
     </section>
   );
