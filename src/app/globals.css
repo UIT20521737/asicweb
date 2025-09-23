@@ -3,10 +3,9 @@
 
 /* Định nghĩa màu mặc định (chế độ sáng) */
 @theme {
-
-    --color-primary: #047857;
-    --color-primary-hover: #059669;
-    --color-primary-light:#09a377;
+    --color-primary: #2563EB;       /* đổi từ xanh lá sang xanh dương */
+    --color-primary-hover: #1D4ED8; /* hover màu xanh dương đậm hơn */
+    --color-primary-light:#3B82F6;  /* màu xanh dương nhạt hơn */
     --color-accent: #f59e0b;
     --color-accent-hover: #fbbf24;
     --color-background: #ffffff;
@@ -18,8 +17,8 @@
 
 /* Khi có class="dark", các màu này sẽ được dùng thay thế */
 .dark {
-  --color-primary: #ffffff;
-  --color-primary-light:#f1f1f1;
+  --color-primary: #3B82F6;        /* xanh dương sáng cho dark mode */
+  --color-primary-light:#60A5FA;
   --color-accent: #f59e0b;
   --color-accent-hover: #fbbf24;
   --color-background: #333131;
@@ -28,8 +27,6 @@
   --color-border: #374151;
   --color-active: #6c6464;
 }
-
-
 
 /* Keyframe cho hiệu ứng (nếu cần) */
 @keyframes gradient-shift {

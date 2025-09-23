@@ -11,7 +11,7 @@ export default function Header() {
     const routers =  [
         {
             href: "/",
-            content: "Introduction"
+            content: "Home"
         },
         {
             href: "/news",
