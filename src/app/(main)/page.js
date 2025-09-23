@@ -1,5 +1,5 @@
 import AboutUs from "@/components/AboutUs";
-import Activities from "@/components/Activities";
+import News from "@/components/News";
 import FieldsOfActivity from "@/components/FieldsOfActivity";
 import Publications from "@/components/Publications";
 import ResearchDirections from "@/components/ResearchDirection";
@@ -14,7 +14,7 @@ export default function Home() {
       <SupportingActivities/>
       <TeamMembers/>
       <Publications/>
-      <Activities/>
+      <News/>
     </div>
   );
 }

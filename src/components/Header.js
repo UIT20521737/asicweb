@@ -13,21 +13,30 @@ export default function Header() {
             href: "/",
             content: "Home"
         },
+        
+        {
+            href: "/publications",
+            content: "Publications"
+        },
+        {
+            href: "/services",
+            content: "Services"
+        },
         {
             href: "/news",
             content: "News"
         },
         {
-            href: "/publications",
-            content: "Publications"
+            href: "/blog",
+            content: "Blog"
         },
         {
             href: "/calendar",
             content: "Calendar"        
         },
         {
-            href: "/services",
-            content: "Services"
+            href: "/contact",
+            content: "Contact"
         },
     ]
     return (
@@ -41,7 +50,7 @@ export default function Header() {
                 <Logo />
                 <nav className="hidden lg:flex items-center space-x-6">
                     {routers.map((item, index) => (<NavLink className="text-primary font-medium  hover:text-foreground transition-colors" key={index} href={item.href}>{item.content}</NavLink>))}
-                    <ThemeToggleButton/>
+                    {/* <ThemeToggleButton/> */}
                 </nav>
                 <button
                     onClick={() => setIsMenuOpen(true)}

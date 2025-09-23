@@ -61,6 +61,7 @@ export default function TeamMembers() {
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">
             Our Team
@@ -70,25 +71,24 @@ export default function TeamMembers() {
           </p>
         </div>
 
+        {/* Categories */}
         {categories.map((category, index) => (
           <div key={index} className="mt-12">
             <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-8">
               {category.name}
             </h3>
 
-            <div className="flex flex-wrap justify-center gap-6">
+            <div className="flex flex-wrap justify-center gap-8">
               {category.members.map((member, memberIndex) => {
                 const isPlaceholderImage = member.imageUrl.startsWith('/images/placeholder-');
                 const initials = isPlaceholderImage ? getInitials(member.name) : '';
 
                 return (
-                  <div
-                    key={memberIndex}
-                    className="group flex flex-col items-center text-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 w-[200px]"
-                  >
-                    <div className="relative w-28 h-28 mb-4 rounded-full overflow-hidden border-4 border-indigo-500 dark:border-indigo-400 transition-transform duration-300 group-hover:scale-105">
+                  <div key={memberIndex} className="flex flex-col items-center text-center w-40">
+                    {/* Avatar */}
+                    <div className="relative w-24 h-24 mb-3 rounded-full overflow-hidden border-2 border-indigo-500 dark:border-indigo-400">
                       {isPlaceholderImage ? (
-                        <div className="text-4xl font-bold text-white bg-indigo-600 dark:bg-indigo-500 w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center bg-indigo-500 dark:bg-indigo-600 text-white font-bold text-2xl">
                           {initials}
                         </div>
                       ) : (
@@ -97,16 +97,15 @@ export default function TeamMembers() {
                           alt={member.name}
                           fill
                           style={{ objectFit: 'cover' }}
-                          className="transition-transform duration-300 group-hover:scale-110"
                         />
                       )}
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+
+                    {/* Name & Title */}
+                    <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">
                       {member.name}
                     </h3>
-                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                      {member.title}
-                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{member.title}</p>
                   </div>
                 );
               })}
