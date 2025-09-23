@@ -59,7 +59,7 @@ export default function TeamMembers() {
   ];
 
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
+    <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

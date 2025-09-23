@@ -10,7 +10,7 @@ const newsList = [
 
 const News = () => {
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900">
+    <section className="py-8 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-10 text-center">
           Latest News from ASIC LAB
