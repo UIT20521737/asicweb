@@ -51,7 +51,7 @@ const publicationsData = [
 
 const Publications = ({ publications = publicationsData }) => {
   return (
-    <section className="py-8 bg-gray-50 dark:bg-gray-900 text-center">
+    <section className="py-8 text-center">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Published Papers
