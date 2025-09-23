@@ -1,3 +1,4 @@
+import ComingSoon from "@/components/ComingSoon";
 
 export const metadata = {
   title: "News",
@@ -6,6 +7,6 @@ export const metadata = {
 
 export default function News() {
   return (
-    <div>news</div>
+    <div><ComingSoon/></div>
   );
 }

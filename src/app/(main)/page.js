@@ -1,7 +1,11 @@
-
+import AboutUs from "@/components/AboutUs";
+import TeamMembers from "@/components/TeamMembers";
 
 export default function Home() {
   return (
-    <div>Home</div>
+    <div>
+      <AboutUs/>
+      <TeamMembers/>
+    </div>
   );
 }
