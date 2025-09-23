@@ -1,64 +1,203 @@
+import React from "react";
+import { Target, Heart, Users, BookOpen, Globe, Lightbulb, ChevronRight } from "lucide-react";
 
-export default function AboutUs() {
+const AboutUs = () => {
+  const fields = [
+    {
+      id: 1,
+      title: "Education & Training",
+      icon: <BookOpen className="w-6 h-6 text-indigo-600" />,
+      description:
+        "Developing training programs to enhance capacity and professional skills.",
+      activities: [
+        "Professional training",
+        "Scientific workshops",
+        "Scholarship programs",
+      ],
+      color: "from-indigo-50 to-indigo-100 border-indigo-200",
+    },
+    {
+      id: 2,
+      title: "Scientific Research",
+      icon: <Lightbulb className="w-6 h-6 text-yellow-600" />,
+      description: "Conducting applied and fundamental scientific research projects.",
+      activities: [
+        "Chip SoC (System on Chip)",
+        "Embedded IoT",
+        "ASIC Design",
+        "VLSI (Very Large Scale Integration)",
+        "FPGA & Digital Design",
+      ],
+      color: "from-yellow-50 to-yellow-100 border-yellow-200",
+    },
+    {
+      id: 3,
+      title: "Community Development",
+      icon: <Users className="w-6 h-6 text-green-600" />,
+      description: "Building and fostering a sustainable professional community.",
+      activities: [
+        "Networking",
+        "Volunteering activities",
+        "Leadership development",
+      ],
+      color: "from-green-50 to-green-100 border-green-200",
+    },
+    {
+      id: 4,
+      title: "International Collaboration",
+      icon: <Globe className="w-6 h-6 text-blue-600" />,
+      description: "Expanding partnerships with international organizations.",
+      activities: ["Academic exchange", "Joint projects", "Exchange programs"],
+      color: "from-blue-50 to-blue-100 border-blue-200",
+    },
+  ];
+
   return (
-    <div className="py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-primary sm:text-4xl">
-            Về chúng tôi
+    <section className="py-16 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* About Us Intro */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            About ASIC LAB
           </h2>
-          <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-            Khám phá các nguyên tắc cốt lõi của Thiết kế IC, SoC và ứng dụng AIoT.
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            ASIC LAB is a research and development center specializing in{" "}
+            <span className="font-medium text-indigo-600 dark:text-indigo-400">
+              Application-Specific Integrated Circuits (ASIC)
+            </span>
+            . We are committed to advancing semiconductor technology through
+            education, research, and collaboration with industry partners.
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Card 1: Thiết kế IC & SoC */}
-          <div className="bg-background rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-xl">
-            <div className="flex justify-center items-center h-12 w-12 rounded-md bg-indigo-500 text-primary mx-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9h2m-2 6h2m14-6h2m-2 6h2M3 9a1 1 0 011-1h16a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
-              </svg>
+        
+
+        {/* Vision - Mission - Core Values */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+          {/* Vision */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center mb-4">
+              <div className="bg-blue-600 p-3 rounded-lg mr-4">
+                <Target className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Vision
+              </h3>
             </div>
-            <h3 className="mt-6 text-xl font-semibold text-center text-primary ">
-              Thiết kế IC & SoC
-            </h3>
-            <p className="mt-4 text-gray-500 dark:text-gray-400">
-              Đi sâu vào các nguyên tắc và phương pháp luận cho việc thiết kế mạch tích hợp (IC) và hệ thống trên chip (SoC), bao gồm kiến trúc, RTL, vật lý và xác minh.
+            <p className="text-gray-700 dark:text-gray-300">
+              To become a leading organization in education development and
+              scientific research, contributing to building a strong knowledge
+              community and sustainable development in Vietnam and Southeast Asia
+              by 2030.
             </p>
           </div>
 
-          {/* Card 2: AIoT */}
-          <div className="bg-background rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-xl">
-            <div className="flex justify-center items-center h-12 w-12 rounded-md bg-teal-500 text-white mx-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+          {/* Mission */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center mb-4">
+              <div className="bg-green-600 p-3 rounded-lg mr-4">
+                <Heart className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Mission
+              </h3>
             </div>
-            <h3 className="mt-6 text-xl font-semibold text-center text-primary ">
-              AIoT và Ứng dụng
-            </h3>
-            <p className="mt-4 text-gray-500 dark:text-gray-400">
-              Kết hợp trí tuệ nhân tạo (AI) với Internet of Things (IoT) để tạo ra các giải pháp thông minh, hiệu quả. Chúng tôi khám phá các ứng dụng trong công nghiệp, nhà thông minh, và hơn thế nữa.
+            <p className="text-gray-700 dark:text-gray-300">
+              We are committed to providing high-quality educational solutions,
+              promoting applied scientific research, and building a professional
+              community that creates positive values for society.
             </p>
           </div>
 
-          {/* Card 3: Nghiên cứu & Phát triển */}
-          <div className="bg-background rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-xl">
-            <div className="flex justify-center items-center h-12 w-12 rounded-md bg-purple-500 text-white mx-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-              </svg>
-            </div>
-            <h3 className="mt-6 text-xl font-semibold text-center text-primary">
-              Nghiên cứu & Đổi mới
+          {/* Core Values */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              Core Values
             </h3>
-            <p className="mt-4 text-gray-500 dark:text-gray-400">
-              Luôn đi đầu trong công nghệ với nỗ lực R&D liên tục của chúng tôi, thúc đẩy sự đổi mới trong lĩnh vực thiết kế chip và các giải pháp AIoT tiên tiến.
+            <div className="space-y-3">
+              {[
+                {
+                  title: "Quality",
+                  desc: "Commitment to delivering high-quality services and products",
+                },
+                {
+                  title: "Innovation",
+                  desc: "Continuously innovating and applying advanced technologies",
+                },
+                {
+                  title: "Collaboration",
+                  desc: "Building sustainable and effective partnerships",
+                },
+                {
+                  title: "Responsibility",
+                  desc: "Ensuring accountability to the community and the environment",
+                },
+              ].map((value, index) => (
+                <div key={index} className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-indigo-600 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="text-gray-900 dark:text-white font-medium">
+                      {value.title}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-300 text-sm">
+                      {value.desc}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Fields of Activity & Research Directions */}
+        <div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Fields of Activity & Research Directions
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              We focus on education, advanced research, international
+              collaboration, and community development, aiming to create
+              sustainable values for science and society.
             </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {fields.map((field) => (
+              <div key={field.id} className="group h-full">
+                <div
+                  className={`flex flex-col h-full bg-gradient-to-br ${field.color} p-6 rounded-xl hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border`}
+                >
+                  <div className="mb-4">
+                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-md">
+                      {field.icon}
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    {field.title}
+                  </h3>
+                  <p className="text-gray-700 mb-4 text-sm leading-relaxed flex-0">
+                    {field.description}
+                  </p>
+                  <div className="space-y-2 flex-1">
+                    {field.activities.map((activity, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center text-sm text-gray-800"
+                      >
+                        <ChevronRight className="w-3 h-3 mr-2 text-gray-500" />
+                        <span>{activity}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default AboutUs;
