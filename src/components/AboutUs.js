@@ -1,19 +1,18 @@
-
 export default function AboutUs() {
   return (
     <div className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-primary sm:text-4xl">
-            Về chúng tôi
-          </h2>
-          <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-            Khám phá các nguyên tắc cốt lõi của Thiết kế IC, SoC và ứng dụng AIoT.
-          </p>
+   <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary">
+    About Us
+</h2>
+<p className="mt-4 sm:mt-6 text-xl sm:text-2xl text-primary-light">
+    Our team is on a mission to pioneer groundbreaking solutions in IC & SoC design and AIoT applications. Through relentless effort, we're building a smarter world, one tangible product at a time.
+</p>
         </div>
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Card 1: Thiết kế IC & SoC */}
+          {/* Card 1: IC & SoC Design */}
           <div className="bg-background rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-xl">
             <div className="flex justify-center items-center h-12 w-12 rounded-md bg-indigo-500 text-primary mx-auto">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -21,14 +20,14 @@ export default function AboutUs() {
               </svg>
             </div>
             <h3 className="mt-6 text-xl font-semibold text-center text-primary ">
-              Thiết kế IC & SoC
+              IC & SoC Design
             </h3>
             <p className="mt-4 text-gray-500 dark:text-gray-400">
-              Đi sâu vào các nguyên tắc và phương pháp luận cho việc thiết kế mạch tích hợp (IC) và hệ thống trên chip (SoC), bao gồm kiến trúc, RTL, vật lý và xác minh.
+              We pioneer the art of Integrated Circuit (IC) and System on Chip (SoC) design, delving into the intricacies of architecture, RTL, physical design, and meticulous verification to forge tomorrow's technology.
             </p>
           </div>
 
-          {/* Card 2: AIoT */}
+          {/* Card 2: AIoT and its Applications */}
           <div className="bg-background rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-xl">
             <div className="flex justify-center items-center h-12 w-12 rounded-md bg-teal-500 text-white mx-auto">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,14 +35,14 @@ export default function AboutUs() {
               </svg>
             </div>
             <h3 className="mt-6 text-xl font-semibold text-center text-primary ">
-              AIoT và Ứng dụng
+              AIoT and Applications
             </h3>
             <p className="mt-4 text-gray-500 dark:text-gray-400">
-              Kết hợp trí tuệ nhân tạo (AI) với Internet of Things (IoT) để tạo ra các giải pháp thông minh, hiệu quả. Chúng tôi khám phá các ứng dụng trong công nghiệp, nhà thông minh, và hơn thế nữa.
+              By seamlessly merging the power of Artificial Intelligence (AI) with the Internet of Things (IoT), we engineer intelligent, highly efficient solutions that are revolutionizing industries, smart homes, and beyond.
             </p>
           </div>
 
-          {/* Card 3: Nghiên cứu & Phát triển */}
+          {/* Card 3: Research & Development */}
           <div className="bg-background rounded-lg shadow-lg p-6 transform transition duration-500 hover:scale-105 hover:shadow-xl">
             <div className="flex justify-center items-center h-12 w-12 rounded-md bg-purple-500 text-white mx-auto">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -51,10 +50,10 @@ export default function AboutUs() {
               </svg>
             </div>
             <h3 className="mt-6 text-xl font-semibold text-center text-primary">
-              Nghiên cứu & Đổi mới
+              Research & Innovation
             </h3>
             <p className="mt-4 text-gray-500 dark:text-gray-400">
-              Luôn đi đầu trong công nghệ với nỗ lực R&D liên tục của chúng tôi, thúc đẩy sự đổi mới trong lĩnh vực thiết kế chip và các giải pháp AIoT tiên tiến.
+              We stand at the forefront of technology with our relentless commitment to R&D, fueling a culture of innovation that drives advancements in chip design and creates groundbreaking AIoT solutions.
             </p>
           </div>
         </div>

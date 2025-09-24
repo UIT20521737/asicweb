@@ -1,8 +1,6 @@
 // components/ComingSoon.js
 // Hoặc bạn có thể đặt nó trong pages/coming-soon.js nếu muốn nó là một trang riêng biệt
 
-import React from 'react';
-
 export default function ComingSoon() {
   return (
     <div className="flex items-center justify-center min-h-screen  text-center px-4 sm:px-6 lg:px-8">
@@ -18,7 +16,7 @@ export default function ComingSoon() {
 
         {/* Thông báo phụ */}
         <p className="mt-8 text-lg text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
-          Chúng tôi đang nỗ lực hoàn thiện trang này. Vui lòng quay lại sau nhé\!
+          We are trying to complete this page. Please come back later!
         </p>
 
         {/* Có thể thêm một biểu tượng hoặc ảnh nhỏ ở đây nếu muốn, ví dụ: */}

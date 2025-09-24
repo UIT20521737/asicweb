@@ -25,7 +25,7 @@ export default function NotFound() {
         </h2>
         
         {/* Mô tả chi tiết */}
-        <p className="mt-4 text-lg text-muted max-w-md mx-auto">
+        <p className="mt-4 text-green-800 max-w-md mx-auto">
           We couldn't find the page you were looking for. It might have been moved, deleted, or the link you followed was incorrect.
         </p>
         
