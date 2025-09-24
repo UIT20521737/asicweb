@@ -1,16 +1,14 @@
-// src/components/NewsList.js
-"use client";
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Hàm giả lập việc fetch dữ liệu
-const fetchNewsFromServer = async (url) => {
+async function fetchNewsFromServer(url) {
   await new Promise(resolve => setTimeout(resolve, 500));
   // Giả lập chỉ trả về dữ liệu tóm tắt
   return [
     {
       id: 1,
-      title: "ASICLab Wins 'Best Research Paper' at ICAS 2025",
+      title: "ASICLab Wins &apos;Best Research Paper&apos; at ICAS 2025",
       summary: "Our team received top honors for their groundbreaking work on low-power SoC design at the International Conference on Advanced Semiconductors.",
       date: "September 24, 2025",
       image: "/images/news1.jpg",
@@ -33,31 +31,17 @@ const fetchNewsFromServer = async (url) => {
       slug: "phat-scholarship",
     },
   ];
-};
+}
 
-export default function NewsList({ url }) {
-  const [articles, setArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadNews = async () => {
-      setIsLoading(true);
-      const data = await fetchNewsFromServer(url);
-      setArticles(data);
-      setIsLoading(false);
-    };
-
-    if (url) {
-      loadNews();
-    }
-  }, [url]);
+export default async function NewsList({ url }) {
+  const articles = await fetchNewsFromServer(url);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <h1 className="text-4xl font-bold text-center mb-8 text-primary">Latest News</h1>
-      {isLoading ? (
+      {articles.length === 0 ? (
         <div className="flex items-center justify-center p-8 text-foreground">
-          {/* ... loading spinner ... */}
+          <p>No news available.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -67,9 +51,11 @@ export default function NewsList({ url }) {
                 className="rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105"
                 style={{ backgroundColor: 'var(--color-card)' }}
               >
-                <img 
+                <Image 
                   src={article.image} 
                   alt={article.title} 
+                  width={600}
+                  height={200}
                   className="w-full h-48 object-cover transition-transform group-hover:scale-110" 
                 />
                 <div className="p-6">

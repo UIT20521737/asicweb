@@ -1,11 +1,10 @@
-// src/app/(main)/news/[slug]/page.js
-
 import { notFound } from 'next/navigation';
 import { fetchNewsFromApi } from '@/data/news';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export async function generateMetadata({ params }) {
-  const {slug} = await params.slug
+  const { slug } = params; // Fixed: No need to await params.slug
   const article = await fetchNewsFromApi(null, 'full', slug);
   if (!article) {
     return {
@@ -49,9 +48,11 @@ export default async function NewsArticlePage({ params }) {
         className="rounded-lg shadow-lg p-6 sm:p-8" 
         style={{ backgroundColor: 'var(--color-card)' }}
       >
-        <img 
+        <Image 
           src={article.image} 
           alt={article.title} 
+          width={800}
+          height={320}
           className="w-full h-80 object-cover rounded-lg mb-8" 
         />
         

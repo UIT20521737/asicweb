@@ -8,7 +8,6 @@ export const metadata = {
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background dark:bg-background text-foreground px-4 py-12">
-
       <div className="max-w-xl text-center">
         {/* Phần chữ 'Oops!' lớn với hiệu ứng gradient/vũ trụ */}
         <h1 
@@ -26,7 +25,7 @@ export default function NotFound() {
         
         {/* Mô tả chi tiết */}
         <p className="mt-4 text-green-800 max-w-md mx-auto">
-          We couldn't find the page you were looking for. It might have been moved, deleted, or the link you followed was incorrect.
+          We couldn&apos;t find the page you were looking for. It might have been moved, deleted, or the link you followed was incorrect.
         </p>
         
         {/* Nút quay về trang chủ */}
