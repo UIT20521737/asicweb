@@ -1,17 +1,13 @@
-// components/TeamMembers.js
-
 import React from 'react';
 import Image from 'next/image';
 
 const getInitials = (name) => {
   const parts = name.split(' ');
   if (parts.length > 1) {
-    // Get the first letters of the last and second-to-last words (e.g., TRACY DUC -> TD)
     const firstInitial = parts[parts.length - 2][0];
     const secondInitial = parts[parts.length - 1][0];
     return `${firstInitial}${secondInitial}`;
   } else if (parts.length === 1) {
-    // If there's only one word, get the first two letters
     return parts[0].substring(0, 2);
   }
   return '';
@@ -19,72 +15,105 @@ const getInitials = (name) => {
 
 const teamMembers = [
   {
-    name: "Dr. NGUYEN MINH SON",
-    title: "Head of Laboratory",
-    imageUrl: "/images/Nguyen-Minh-Son.bak.png", // Existing photo
+    name: "Dr. Nguyen Minh Son",
+    title: "Laboratory Director",
+    imageUrl: "/images/Nguyen-Minh-Son.bak.png",
+    category: "Director",
   },
   {
-    name: "M.Eng. TA TRI DUC",
+    name: "MSc. Ta Tri Duc",
     title: "Principal Researcher",
-    imageUrl: "/images/Ta-Tri-Duc.bak.png", // Existing photo
+    imageUrl: "/images/Ta-Tri-Duc.bak.png",
+    category: "Member",
   },
   {
-    name: "B.Eng. NGUYEN THANH PHAT",
+    name: "BSc. Nguyen Thanh Phat",
     title: "Researcher",
-    imageUrl: "/images/placeholder-phat.png", // Displays "TP" (Thanh Phat)
+    imageUrl: "/images/placeholder-phat.png",
+    category: "Member",
   },
   {
-    name: "B.Eng. TRAN QUOC THINH",
+    name: "BSc. Tran Quoc Thinh",
     title: "Researcher",
-    imageUrl: "/images/placeholder-thinh.png", // Displays "QT" (Quoc Thinh)
+    imageUrl: "/images/placeholder-thinh.png",
+    category: "Member",
+  },
+  {
+    name: "BSc. PHAM CAN LONG",
+    title: "Collaborator",
+    imageUrl: "/images/placeholder-hung.png",
+    category: "Member",
+  },
+  {
+    name: "BSc. PHAN DUY",
+    title: "Collaborator",
+    imageUrl: "/images/placeholder-mai.png",
+    category: "Member",
   },
 ];
 
 export default function TeamMembers() {
-  return (
-    <div className="py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center">
-        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary">
-        Our Team
-        </h2>
-        <p className="mt-4 sm:mt-6 text-xl sm:text-2xl text-primary-light">
-          We are a mission-driven team of engineers and researchers committed to advancing technology. Specializing in IC & SoC design and AIoT applications, we create efficient, reliable solutions. Our passion for innovation fuels our work, as we strive to turn groundbreaking ideas into impactful products for the community.
-        </p>
+  const directors = teamMembers.filter(m => m.category === "Director");
+  const members = teamMembers.filter(m => m.category !== "Director");
+
+  const renderMember = (member) => {
+    const isPlaceholderImage = member.imageUrl.startsWith('/images/placeholder-');
+    const initials = isPlaceholderImage ? getInitials(member.name) : '';
+
+    const avatarClasses = member.category === "Director"
+      ? "relative w-28 h-28 mb-3 rounded-full overflow-hidden border-4 border-indigo-600 flex-shrink-0"
+      : "relative w-24 h-24 mb-3 rounded-full overflow-hidden border-2 border-indigo-400 flex-shrink-0";
+
+    const titleClasses = member.category === "Director"
+      ? "text-sm font-medium text-indigo-600 dark:text-indigo-400"
+      : "text-sm text-gray-600 dark:text-gray-400";
+
+    return (
+      <div key={member.name} className="flex flex-col items-center text-center w-44 flex-shrink-0">
+        <div className={avatarClasses}>
+          {isPlaceholderImage ? (
+            <div className="w-full h-full flex items-center justify-center bg-indigo-500 dark:bg-indigo-600 text-white font-bold text-2xl">
+              {initials}
+            </div>
+          ) : (
+            <Image
+              src={member.imageUrl}
+              alt={member.name}
+              fill
+              style={{ objectFit: 'cover' }}
+            />
+          )}
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teamMembers.map((member, index) => {
-            const isPlaceholderImage = member.imageUrl.startsWith('/images/placeholder-');
-            const initials = isPlaceholderImage ? getInitials(member.name) : '';
+        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 w-full truncate">
+          {member.name}
+        </h3>
+        <p className={titleClasses}>{member.title}</p>
+      </div>
+    );
+  };
 
-            return (
-              <div key={index} className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-lg">
-                <div className="relative w-32 h-32 mb-4 rounded-full overflow-hidden border-4 border-green-500 dark:border-green-400 flex items-center justify-center">
-                  {isPlaceholderImage ? (
-                    <div className="text-5xl font-bold text-white bg-green-600 dark:bg-green-500 w-full h-full flex items-center justify-center">
-                      {initials}
-                    </div>
-                  ) : (
-                    <Image 
-                      src={member.imageUrl}
-                      alt={member.name}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  )}
-                </div>
-                <h3 className="text-xl font-semibold text-primary">
-                  {member.name}
-                </h3>
-                <p className="mt-1 text-base text-gray-600 dark:text-gray-400">
-                  {member.title}
-                </p>
-              </div>
-            );
-          })}
+  return (
+    <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+            Our Team
+          </h2>
+         
+        </div>
+
+        {/* Director Row */}
+        <div className="flex flex-wrap justify-center gap-8 mb-8">
+          {directors.map(renderMember)}
+        </div>
+
+        {/* Members Row */}
+        <div className="flex flex-wrap justify-center gap-8">
+          {members.map(renderMember)}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
