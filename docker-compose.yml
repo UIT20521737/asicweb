@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  asic-web:
+    image: longphamjustdoit/asic-web:latest
+    container_name: asic-web
+    ports:
+      - "3088:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped

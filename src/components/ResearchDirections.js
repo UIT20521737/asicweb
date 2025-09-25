@@ -65,7 +65,7 @@ const ResearchDirections = () => {
             {/* Icon */}
             <div className="mb-4">
               <div className="w-16 h-16 flex items-center justify-center bg-white shadow-md rounded-full mx-auto">
-                <area.icon className="w-8 h-8 text-indigo-600" />
+                <area.icon className="w-8 h-8 text-primary dark:text-primary-light" />
               </div>
             </div>
             {/* Title */}
