@@ -1,9 +1,10 @@
 // components/PublicationsList.js
+import { API_HOST } from "@/data/apihost";
 import React from "react";
 
 // Fetch publications từ server
 async function fetchPublications() {
-  const res = await fetch("https://asicportal.longpc.xyz/api/publications", {
+  const res = await fetch( `${API_HOST}/api/publications`, {
     cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch publications");

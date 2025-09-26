@@ -1,8 +1,9 @@
+import { API_HOST } from '@/data/apihost';
 import Link from 'next/link';
 
 // Fetch news từ server
 async function fetchNews() {
-  const res = await fetch('https://asicportal.longpc.xyz/api/news', {
+  const res = await fetch(`${API_HOST}/api/news`, {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error('Failed to fetch news');
