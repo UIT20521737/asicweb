@@ -1,30 +1,32 @@
-# Stage 1: Build
-FROM node:18-alpine AS builder
-
+# =========================
+# Stage 1 – Build
+# =========================
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json ./
+COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
-# Install dependencies
-RUN npm install
-
-# Copy all source code
 COPY . .
+RUN npm run build && rm -rf .next/cache
 
-# Build the application
-RUN npm run build
 
-# Stage 2: Runtime
-FROM node:18-alpine
-
+# =========================
+# Stage 2 – Production
+# =========================
+FROM node:20-alpine AS production
 WORKDIR /app
 
-# Copy build files from builder stage
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+# 👉 Không cần cài node_modules ở đây nữa!
+
+# Chỉ copy output standalone, static và public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-# Run the application
-CMD ["npm", "start"]
+# Nếu có env thì copy thêm
+# COPY --from=builder /app/.env.production .env.local
+
+USER node
+EXPOSE 3000
+CMD ["node", "server.js"]

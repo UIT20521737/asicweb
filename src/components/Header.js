@@ -26,10 +26,7 @@ export default function Header() {
             href: "/news",
             content: "News"
         },
-        {
-            href: "/blog",
-            content: "Blog"
-        },
+
         {
             href: "/calendar",
             content: "Calendar"        
