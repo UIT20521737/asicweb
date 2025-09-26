@@ -19,8 +19,10 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white">Home</Link></li>
-              <li><Link href="/activities" className="hover:text-white">Activities</Link></li>
-              <li><Link href="/team" className="hover:text-white">Team</Link></li>
+              <li><Link href="/publications" className="hover:text-white">Publications</Link></li>
+              <li><Link href="/services" className="hover:text-white">Services</Link></li>
+              <li><Link href="/news" className="hover:text-white">News</Link></li>
+              <li><Link href="/calendar" className="hover:text-white">Calendar</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
             </ul>
           </div>
@@ -28,7 +30,7 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Contact</h3>
-            <p className="text-sm">📍 123 Innovation Street, Ho Chi Minh City, Vietnam</p>
+            <p className="text-sm">📍 ASIC LAB, 6th Floor, University of Information Technology, Quarter 34, Linh Xuan Ward, Ho Chi Minh City, Vietnam</p>
             <p className="text-sm">📧 contact@asiclab.org</p>
             <p className="text-sm">📞 +84 123 456 789</p>
           </div>
