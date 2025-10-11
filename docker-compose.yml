@@ -2,11 +2,18 @@ version: '3.8'
 
 services:
   asic-web:
-    image: longphamjustdoit/asic-web:latest
-    container_name: asic-web
+    image: longphamjustdoit/asicweb:latest
+    container_name: asicweb
     ports:
-      - "3088:3000"
+      - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_HOST=https://asicportal.longpc.xyz
+      - NEXT_PUBLIC_API_HOST=https://asicweb-portal.longpc.xyz
     restart: unless-stopped
+    volumes:
+      - ./next-cache:/app/.next/cache
+    networks:
+      - asicweb
+networks:
+  asicweb:
+    external: true

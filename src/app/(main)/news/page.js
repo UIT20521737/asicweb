@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 export default function News() {
-  const newsApiUrl = "https://your-api.com/api/news";
+  const newsApiUrl = `${process.env.NEXT_PUBLIC_API_HOST}/api/news`;
   return (
     <div className="flex min-h-screen flex-col items-center p-8">
       <NewsList url={newsApiUrl} />
