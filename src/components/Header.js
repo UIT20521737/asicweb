@@ -18,15 +18,15 @@ export default function Header() {
             href: "/publications",
             content: "Publications"
         },
-        {
-            href: "/services",
-            content: "Services"
-        },
+       
         {
             href: "/news",
             content: "News"
         },
-
+ {
+            href: "/services",
+            content: "Services"
+        },
         {
             href: "/calendar",
             content: "Calendar"        

@@ -30,9 +30,10 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Contact</h3>
-            <p className="text-sm">📍 ASIC LAB, 6th Floor, University of Information Technology, Quarter 34, Linh Xuan Ward, Ho Chi Minh City, Vietnam</p>
+            
             <p className="text-sm">📧 asic@uit.edu.vn</p>
             <p className="text-sm">📞 +84 768 053 826</p>
+            <p className="text-sm">📍 ASIC LAB, 6th Floor, University of Information Technology, Quarter 34, Linh Xuan Ward, Ho Chi Minh City, Vietnam</p>
           </div>
         </div>
 

@@ -1,45 +1,51 @@
-// src/data/news.js
-
-// Dữ liệu đầy đủ của các bài viết
-const newsArticlesData = [
-  {
-    id: 1,
-    title: "ASICLab Wins 'Best Research Paper' at ICAS 2025",
-    summary: "Our team received top honors for their groundbreaking work on low-power SoC design at the International Conference on Advanced Semiconductors.",
-    date: "September 24, 2025",
-    image: "/images/news1.jpg",
-    slug: "asiclab-wins-best-paper",
-    content: "The ASICLab team presented their research titled 'A Novel Low-Power AIoT Chip for Edge Computing' at this year's ICAS conference. The paper was recognized for its innovative approach to reducing power consumption in AIoT devices, which is a critical step towards more sustainable and efficient technology. This achievement highlights the lab's commitment to pushing the boundaries of integrated circuit design and its impact on the industry.",
-  },
-  {
-    id: 2,
-    title: "New AIoT Research Project Launched with TechCorp",
-    summary: "ASICLab is excited to announce a new collaboration with TechCorp to develop next-generation AIoT solutions for industrial applications.",
-    date: "September 15, 2025",
-    image: "/images/news2.jpg",
-    slug: "aiot-project-launch",
-    content: "In a major strategic partnership, ASICLab and TechCorp have officially launched a joint research project focused on creating cutting-edge AIoT platforms. This collaboration will leverage ASICLab's expertise in hardware design and TechCorp's strong position in the industrial sector. The project aims to integrate AI capabilities directly into IoT devices, leading to smarter, more autonomous industrial systems.",
-  },
-];
-
 /**
- * Hàm giả lập việc gọi API để lấy danh sách bài viết.
+ * Fetches news articles from an external API.
  *
- * @param {string} url - URL của API (trong môi trường thực tế).
- * @param {string} type - Loại dữ liệu cần lấy ('summary' cho danh sách, 'full' cho bài viết chi tiết).
- * @param {string} slug - Slug của bài viết cần lấy (chỉ khi type là 'full').
- * @returns {Promise<Array | Object>} Dữ liệu bài viết.
+ * @param {string} url - Base URL of the API (e.g., 'https://api.example.com/news').
+ * @param {string} type - Type of data to fetch ('summary' for list, 'full' for single article).
+ * @param {string} slug - Slug of the article to fetch (only when type is 'full').
+ * @returns {Promise<Array | Object>} News article(s) data or null if not found.
  */
 export const fetchNewsFromApi = async (url, type = 'summary', slug = '') => {
-  // Mô phỏng độ trễ của mạng (1 giây)
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  try {
+    // Construct the API endpoint based on type and slug
+    const endpoint = type === 'full' && slug ? `${url}/${slug}` : url;
 
-  if (type === 'full' && slug) {
-    const article = newsArticlesData.find(a => a.slug === slug);
-    return article || null;
-  } else {
-    // Trả về dữ liệu tóm tắt cho trang danh sách
-    const summaryData = newsArticlesData.map(({ content, ...rest }) => rest);
+    // Make the API request
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any required headers, e.g., Authorization if needed
+        // 'Authorization': `Bearer ${process.env.API_TOKEN}`,
+      },
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    // Parse the JSON response
+    const data = await response.json();
+
+    // Handle 'full' type with slug
+    if (type === 'full' && slug) {
+      // If no article is found, return null
+      if (!data) {
+        return null;
+      }
+      return data; // Return the single article object
+    }
+
+    // Handle 'summary' type (list of articles)
+    // Optionally filter out content for summaries
+    const summaryData = data.map(({ content, ...rest }) => rest);
     return summaryData;
+
+  } catch (error) {
+    console.error('Error fetching news from API:', error.message);
+    // Return null for single article or empty array for list to maintain compatibility
+    return type === 'full' ? null : [];
   }
 };

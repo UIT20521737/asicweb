@@ -14,12 +14,12 @@ export default function CalendarList() {
   return (
     <>  
         {/* Các nút chuyển đổi */}
-        <div className="flex justify-center space-x-4 mt-10 mb-6">
+        <div className="flex justify-center space-x-4 mt-10">
         
             <button
             onClick={() => setActiveTab('roster')}
             className={`cursor-pointer px-6 py-3 font-bold rounded-lg transition-colors ${
-                activeTab === 'roster' ? 'bg-primary text-txt-primary' : 'bg-gray-200 text-gray-800'
+                activeTab === 'roster' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'
             }`}
             >
             Lab Duty Roster
@@ -27,7 +27,7 @@ export default function CalendarList() {
             <button
             onClick={() => setActiveTab('activities')}
             className={`cursor-pointer px-6 py-3 font-bold rounded-lg transition-colors ${
-                activeTab === 'activities' ? 'bg-primary text-txt-primary' : 'bg-gray-200 text-gray-800'
+                activeTab === 'activities' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'
             }`}
             >
             Lab Activities

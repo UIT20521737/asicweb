@@ -22,7 +22,7 @@ export default function Calendar() {
           href={googleSheetUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-btn-url hover:bg-btn-url-hover text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
+          className="bg-btn-url hover:bg-btn-url-hover font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
         >
           View Lab Schedule
         </a>
@@ -30,7 +30,7 @@ export default function Calendar() {
           href={googleFormsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-btn-url hover:bg-btn-url-hover text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
+          className="bg-btn-url hover:bg-btn-url-hover font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
         >
           Register for Lab Time
         </a>

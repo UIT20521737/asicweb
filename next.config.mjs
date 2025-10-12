@@ -8,6 +8,11 @@ const nextConfig = {
         hostname: 'asicweb-portal.longpc.xyz',
         pathname: '/api/files/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        pathname: '/api/files/**',
+      },
     ],
   },
 };

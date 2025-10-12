@@ -203,10 +203,10 @@ export default function LabDutyCalendar({ url }) {
 
       {/* Navigation Footer */}
       <div className="flex justify-between items-center mt-4">
-        <button onClick={goToPreviousWeek} className="p-2 rounded-lg bg-muted transition-colors cursor-pointer text-txt-primary bg-primary hover:bg-accent-hover hover:text-white">
+        <button onClick={goToPreviousWeek} className="p-2 rounded-lg bg-muted transition-colors cursor-pointer text-white bg-primary hover:bg-accent-hover hover:text-white">
           Previous Week
         </button>
-        <button onClick={goToNextWeek} className="p-2 rounded-lg bg-muted transition-colors cursor-pointer text-txt-primary bg-primary hover:bg-accent-hover hover:text-white">
+        <button onClick={goToNextWeek} className="p-2 rounded-lg bg-muted transition-colors cursor-pointer text-white bg-primary hover:bg-accent-hover hover:text-white">
           Next Week
         </button>
       </div>
