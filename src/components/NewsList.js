@@ -62,8 +62,8 @@ export default async function NewsList() {
       <div className="border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-12 max-w-7xl">
           <div className="text-center space-y-3">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900">
-              Latest News
+            <h1 className="text-5xl md:text-6xl text-primary font-bold tracking-tight text-gray-900">
+              News
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Stay informed with our curated selection of the most important stories

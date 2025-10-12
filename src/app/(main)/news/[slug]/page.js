@@ -40,24 +40,39 @@ function formatDate(isoDate) {
   }
 }
 
-// Hàm trích xuất headings từ nội dung HTML
-function extractHeadings(htmlContent) {
-  if (!htmlContent) return [];
+// Hàm thêm id vào headings và trích xuất chúng
+function processContentWithHeadings(htmlContent) {
+  if (!htmlContent) return { processedContent: '', headings: [] };
+  
   try {
     const dom = new JSDOM(htmlContent);
     const doc = dom.window.document;
     const headings = [];
+    
+    // Thêm id cho tất cả headings
     doc.querySelectorAll('h1, h2, h3').forEach((element) => {
+      const id = element.id || element.textContent.toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special characters
+        .replace(/\s+/g, '-')      // Replace spaces with hyphens
+        .replace(/-+/g, '-')       // Replace multiple hyphens with single
+        .trim();
+      
+      element.id = id;
+      
       headings.push({
-        id: element.id || element.textContent.toLowerCase().replace(/\s+/g, '-'),
+        id: id,
         text: element.textContent,
         level: element.tagName.toLowerCase(),
       });
     });
-    return headings;
+    
+    return {
+      processedContent: doc.body.innerHTML,
+      headings: headings
+    };
   } catch (error) {
-    console.error('Error parsing headings:', error);
-    return [];
+    console.error('Error processing content:', error);
+    return { processedContent: htmlContent, headings: [] };
   }
 }
 
@@ -143,7 +158,7 @@ export default async function NewsArticlePage({ params }) {
     notFound();
   }
 
-  const headings = extractHeadings(article.content);
+  const { processedContent, headings } = processContentWithHeadings(article.content);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -195,9 +210,34 @@ export default async function NewsArticlePage({ params }) {
                 priority
               />
             )}
-            <div className="prose dark:prose-invert max-w-none text-left">
-              {article.content ? (
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            <div className="prose prose-slate max-w-none lg:prose-lg">
+              {processedContent ? (
+                <div
+                  className="leading-relaxed 
+                    [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mt-6 [&_h1]:mb-4 [&_h1]:text-slate-800
+                    [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mt-5 [&_h2]:mb-3 [&_h2]:text-slate-700
+                    [&_h3]:text-xl [&_h3]:font-medium [&_h3]:mt-4 [&_h3]:mb-2 [&_h3]:text-slate-600
+                    [&_p]:text-base [&_p]:mb-4 [&_p]:text-slate-700 [&_p]:leading-7
+                    [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:text-slate-700
+                    [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:text-slate-700
+                    [&_li]:mb-2
+                    [&_blockquote]:border-l-4 [&_blockquote]:border-slate-300 [&_blockquote]:pl-4 [&_blockquote]:my-4 [&_blockquote]:text-slate-600 [&_blockquote]:italic
+                    [&_a]:!text-[#0768ea] [&_a]:hover:!text-[#0557c2] [&_a]:transition-colors [&_a]:!bg-transparent [&_a]:underline
+                    [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4 [&_img]:rounded-md [&_img]:shadow-lg
+                    [&_video]:max-w-full [&_video]:h-auto [&_video]:my-4 [&_video]:rounded-md
+                    [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:text-slate-800
+                    [&_pre]:bg-slate-900 [&_pre]:text-slate-100 [&_pre]:p-4 [&_pre]:rounded-md [&_pre]:overflow-x-auto [&_pre]:my-4
+                    [&_table]:w-full [&_table]:border-collapse [&_table]:my-4
+                    [&_th]:border [&_th]:border-slate-300 [&_th]:bg-slate-100 [&_th]:px-4 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold
+                    [&_td]:border [&_td]:border-slate-300 [&_td]:px-4 [&_td]:py-2
+                    dark:[&_h1]:text-slate-200 dark:[&_h2]:text-slate-300 dark:[&_h3]:text-slate-400
+                    dark:[&_p]:text-slate-300 dark:[&_ul]:text-slate-300 dark:[&_ol]:text-slate-300
+                    dark:[&_blockquote]:border-slate-600 dark:[&_blockquote]:text-slate-400
+                    dark:[&_code]:bg-slate-800 dark:[&_code]:text-slate-200
+                    dark:[&_th]:bg-slate-800 dark:[&_th]:border-slate-700
+                    dark:[&_td]:border-slate-700"
+                  dangerouslySetInnerHTML={{ __html: processedContent }}
+                />
               ) : (
                 <p>No content available.</p>
               )}
