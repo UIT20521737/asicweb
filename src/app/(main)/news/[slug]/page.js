@@ -5,266 +5,172 @@ import Image from 'next/image';
 import TableOfContents from '../../../../components/TableOfContents';
 import { JSDOM } from 'jsdom';
 
-// Hàm gọi API chung để tái sử dụng
+// --- HELPERS ---
+
+// Hàm xử lý đường dẫn thumbnail/image
+function getThumbnailUrl(thumbnail) {
+  if (!thumbnail) return null;
+  if (thumbnail.startsWith('http')) return thumbnail;
+  return `${process.env.NEXT_PUBLIC_API_HOST}${thumbnail}`;
+}
+
 async function getArticle(slug) {
   try {
-    const article = await fetchNewsFromApi(
-      `${process.env.NEXT_PUBLIC_API_HOST}/api/news/slug`,
-      'full',
-      slug
-    );
+    const article = await fetchNewsFromApi(`${process.env.NEXT_PUBLIC_API_HOST}/api/news/slug`, 'full', slug);
     return article || null;
-  } catch (error) {
-    console.error('Error fetching article:', error);
-    return null;
-  }
+  } catch (error) { return null; }
 }
 
-// Hàm gọi API để lấy bài viết liên quan
 async function getRelatedArticles(id) {
   try {
-    const related = await fetchNewsFromApi(
-      `${process.env.NEXT_PUBLIC_API_HOST}/api/news/${id}/related`,
-      'full'
-    );
+    const related = await fetchNewsFromApi(`${process.env.NEXT_PUBLIC_API_HOST}/api/news/${id}/related`, 'full');
     return related || [];
-  } catch (error) {
-    console.error('Error fetching related articles:', error);
-    return [];
-  }
+  } catch (error) { return []; }
 }
 
-// Hàm format ngày tháng theo GMT+7
 function formatDate(isoDate) {
   if (!isoDate) return 'No date available';
-  try {
-    const date = new Date(isoDate);
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-      timeZone: 'Asia/Ho_Chi_Minh',
-    }).format(date);
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return 'No date available';
-  }
+  return new Date(isoDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// Hàm thêm id vào headings và trích xuất chúng
 function processContentWithHeadings(htmlContent) {
   if (!htmlContent) return { processedContent: '', headings: [] };
-  
-  try {
-    const dom = new JSDOM(htmlContent);
-    const doc = dom.window.document;
-    const headings = [];
-    
-    // Thêm id cho tất cả headings
-    doc.querySelectorAll('h1, h2, h3').forEach((element) => {
-      const id = element.id || element.textContent.toLowerCase()
-        .replace(/[^\w\s-]/g, '') // Remove special characters
-        .replace(/\s+/g, '-')      // Replace spaces with hyphens
-        .replace(/-+/g, '-')       // Replace multiple hyphens with single
-        .trim();
-      
-      element.id = id;
-      
-      headings.push({
-        id: id,
-        text: element.textContent,
-        level: element.tagName.toLowerCase(),
-      });
-    });
-    
-    return {
-      processedContent: doc.body.innerHTML,
-      headings: headings
-    };
-  } catch (error) {
-    console.error('Error processing content:', error);
-    return { processedContent: htmlContent, headings: [] };
-  }
+  const dom = new JSDOM(htmlContent);
+  const doc = dom.window.document;
+  const headings = [];
+  doc.querySelectorAll('h1, h2, h3').forEach((element) => {
+    const id = element.textContent.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').trim();
+    element.id = id;
+    headings.push({ id, text: element.textContent, level: element.tagName.toLowerCase() });
+  });
+  return { processedContent: doc.body.innerHTML, headings };
 }
 
-// Export viewport metadata
-export function generateViewport() {
-  return {
-    width: 'device-width',
-    initialScale: 1,
-  };
-}
+// --- MAIN PAGE ---
 
-// Generate metadata for SEO
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const article = await getArticle(slug);
-
-  if (!article) {
-    return {
-      title: 'Not Found',
-      description: 'The news article you are looking for does not exist.',
-      robots: 'noindex',
-    };
-  }
-
-  return {
-    title: article.title || 'Untitled Article',
-    description: article.summary || 'No summary available.',
-    openGraph: {
-      title: article.title || 'Untitled Article',
-      description: article.summary || 'No summary available.',
-      images: article.image ? [{ url: article.image, width: 800, height: 320, alt: article.title || 'Article image' }] : [],
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/news/${slug}`,
-      type: 'article',
-      publishedAt: article.publishedAt || undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title || 'Untitled Article',
-      description: article.summary || 'No summary available.',
-      images: article.image ? [article.image] : [],
-    },
-    robots: 'index, follow',
-    alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/news/${slug}`,
-    },
-  };
-}
-
-// Server-side page component
 export default async function NewsArticlePage({ params }) {
   const { slug } = await params;
   const article = await getArticle(slug);
 
-  if (!article) {
-    notFound();
-  }
+  if (!article) notFound();
 
-  // Fetch related articles using article ID
   const relatedArticles = await getRelatedArticles(article._id);
-
   const { processedContent, headings } = processContentWithHeadings(article.content);
 
+  // Lấy URL ảnh chính (ưu tiên image, fallback thumbnail)
+  const mainImageUrl = getThumbnailUrl(article.image || article.thumbnail);
+
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-7xl">
-      {/* Back Button */}
-      <div className="mb-8">
-        <Link
-          href="/news"
-          className="inline-flex items-center text-primary-light hover:text-primary-dark transition-colors duration-200 text-sm font-semibold"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-          Back to News
-        </Link>
-      </div>
+    <div className="bg-white dark:bg-slate-950 min-h-screen pb-20 font-sans">
+      
+      {/* 1. Header Section */}
+      <header className="pt-10 pb-10 bg-slate-50/50 dark:bg-slate-900/30 border-b border-slate-100 dark:border-slate-800">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <nav className="mb-6 flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Link href="/news" className="hover:text-primary transition-colors italic">News</Link>
+            <span>/</span>
+            <span className="text-slate-900 dark:text-slate-100 line-clamp-1 truncate max-w-xs">{article.title}</span>
+          </nav>
+          
+          <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-6 tracking-tighter">
+            {article.title}
+          </h1>
+          
+          <div className="text-xs font-bold text-slate-500 uppercase tracking-widest border-l-2 border-primary pl-4 italic">
+             <time>{formatDate(article.publishedAt)}</time>
+          </div>
+        </div>
+      </header>
 
-      {/* Three-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-        {/* Table of Contents - Left Column */}
-        <aside className="lg:col-span-3 order-2 lg:order-1">
-          {headings.length > 0 && (
-            <div className="sticky top-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <TableOfContents headings={headings} />
-            </div>
-          )}
-        </aside>
-
-        {/* Article Content - Middle Column */}
-        <main className="lg:col-span-6 order-1 lg:order-2">
-          <h1 className="text-4xl sm:text-5xl font-bold text-center mb-6 text-primary-dark leading-tight">{article.title}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 text-center font-medium">
-            {formatDate(article.publishedAt)}
-          </p>
-          <div className="rounded-xl shadow-xl p-6 sm:p-8 bg-white dark:bg-gray-800 transition-all duration-200">
-            {article.image && (
-              <Image
-                src={article.image}
-                alt={article.title || 'Article image'}
-                width={800}
-                height={320}
-                className="w-full h-64 sm:h-80 object-cover rounded-lg mb-8 shadow-md"
-                priority
-              />
-            )}
-            <div className="prose prose-slate max-w-none lg:prose-lg dark:prose-invert">
-              {processedContent ? (
-                <div
-                  className="leading-relaxed
-                    [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4 [&_h1]:text-slate-800 dark:[&_h1]:text-slate-100
-                    [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:text-slate-700 dark:[&_h2]:text-slate-200
-                    [&_h3]:text-xl [&_h3]:font-medium [&_h3]:mt-5 [&_h3]:mb-3 [&_h3]:text-slate-600 dark:[&_h3]:text-slate-300
-                    [&_p]:text-base [&_p]:mb-5 [&_p]:text-slate-700 [&_p]:leading-7 dark:[&_p]:text-slate-200
-                    [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-5 [&_ul]:text-slate-700 dark:[&_ul]:text-slate-200
-                    [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-5 [&_ol]:text-slate-700 dark:[&_ol]:text-slate-200
-                    [&_li]:mb-2
-                    [&_blockquote]:border-l-4 [&_blockquote]:border-primary-light [&_blockquote]:pl-4 [&_blockquote]:my-5 [&_blockquote]:text-slate-600 [&_blockquote]:italic dark:[&_blockquote]:text-slate-300 dark:[&_blockquote]:border-primary-dark
-                    [&_a]:!text-primary-light [&_a]:hover:!text-primary-dark [&_a]:transition-colors [&_a]:!bg-transparent [&_a]:underline
-                    [&_img]:max-w-full [&_img]:h-auto [&_img]:my-5 [&_img]:rounded-lg [&_img]:shadow-md
-                    [&_video]:max-w-full [&_video]:h-auto [&_video]:my-5 [&_video]:rounded-lg
-                    [&_code]:bg-gray-100 [&_code]:px-2 [&_code]:py-1 [&_code]:rounded-md [&_code]:text-sm [&_code]:text-slate-800 dark:[&_code]:bg-gray-700 dark:[&_code]:text-slate-100
-                    [&_pre]:bg-gray-900 [&_pre]:text-slate-100 [&_pre]:p-5 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:my-5 dark:[&_pre]:bg-gray-800
-                    [&_table]:w-full [&_table]:border-collapse [&_table]:my-5
-                    [&_th]:border [&_th]:border-gray-200 [&_th]:bg-gray-50 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-semibold dark:[&_th]:bg-gray-700 dark:[&_th]:border-gray-600
-                    [&_td]:border [&_td]:border-gray-200 [&_td]:px-4 [&_td]:py-3 dark:[&_td]:border-gray-600"
-                  dangerouslySetInnerHTML={{ __html: processedContent }}
+      {/* 2. Main Content & Sidebar (Tỷ lệ 7:3) */}
+      <div className="container mx-auto px-4 max-w-7xl mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-12 lg:gap-16">
+          
+          {/* NỘI DUNG CHÍNH (70%) */}
+          <main className="lg:col-span-7 w-full">
+            {mainImageUrl && (
+              <div className="relative aspect-video w-full mb-10 overflow-hidden rounded-3xl shadow-lg border border-slate-100 dark:border-slate-800">
+                <Image 
+                  src={mainImageUrl} 
+                  alt={article.title} 
+                  fill 
+                  className="object-cover" 
+                  priority 
                 />
-              ) : (
-                <p className="text-base text-gray-600 dark:text-gray-400">No content available.</p>
+              </div>
+            )}
+
+            <div 
+              className="ql-editor text-lg leading-relaxed text-slate-600 dark:text-slate-300
+                [&_li[data-list='bullet']]:list-none [&_li[data-list='bullet']]:relative [&_li[data-list='bullet']]:pl-8
+                [&_li[data-list='bullet']]:before:content-['•'] [&_li[data-list='bullet']]:before:absolute [&_li[data-list='bullet']]:before:left-2
+                [&_li[data-list='bullet']]:before:text-primary [&_li[data-list='bullet']]:before:font-bold
+                [&_li[data-list='ordered']]:list-decimal [&_li[data-list='ordered']]:ml-8 [&_li[data-list='ordered']]:pl-2
+                [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:text-slate-900 dark:[&_h1]:text-white [&_h1]:mt-10 [&_h1]:mb-4 [&_h1]:scroll-mt-24
+                [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-slate-900 dark:[&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:scroll-mt-24
+                [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-slate-900 dark:[&_h3]:text-white [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:scroll-mt-24
+                [&_img]:rounded-2xl [&_img]:shadow-lg [&_img]:my-8
+                [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:bg-slate-50 dark:[&_blockquote]:bg-slate-900/50 [&_blockquote]:p-6 [&_blockquote]:rounded-r-2xl [&_blockquote]:italic
+                [&_table]:w-full [&_table]:border-collapse [&_table]:my-6
+                [&_th]:border [&_th]:border-slate-200 dark:[&_th]:border-slate-800 [&_th]:p-3 [&_th]:bg-slate-50 dark:[&_th]:bg-slate-900
+                [&_td]:border [&_td]:border-slate-200 dark:[&_td]:border-slate-800 [&_td]:p-3
+                [&_a]:text-primary [&_a]:font-bold [&_a]:underline
+              "
+              dangerouslySetInnerHTML={{ __html: processedContent }}
+            />
+          </main>
+
+          {/* SIDEBAR (30%) */}
+          <aside className="lg:col-span-3 w-full">
+            <div className="sticky top-24 space-y-10">
+              
+              {headings.length > 0 && (
+                <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                  <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-200 mb-5 flex items-center">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
+                    On this page
+                  </h3>
+                  <TableOfContents headings={headings} />
+                </div>
+              )}
+
+              {relatedArticles.length > 0 && (
+                <div className="space-y-8 px-1">
+                  <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center">
+                    <span className="w-4 h-[1px] bg-slate-200 dark:bg-slate-800 mr-2"></span>
+                    Related News
+                  </h3>
+                  <div className="space-y-6">
+                    {relatedArticles.slice(0, 3).map((related) => {
+                      const relatedImg = getThumbnailUrl(related.thumbnail || related.image);
+                      return (
+                        <Link key={related._id} href={`/news/${related.slug}`} className="group block">
+                          <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-slate-100 border border-slate-100 dark:border-slate-800 mb-3 shadow-sm">
+                            {relatedImg && (
+                              <Image
+                                src={relatedImg}
+                                alt={related.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                            )}
+                          </div>
+                          <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                            {related.title}
+                          </h4>
+                          <time className="text-[10px] text-slate-400 mt-2 block font-medium">
+                            {formatDate(related.publishedAt)}
+                          </time>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </div>
-          </div>
-        </main>
-
-        {/* Related Articles - Right Column */}
-        <aside className="lg:col-span-3 order-3">
-          <h2 className="text-xl font-semibold mb-6 text-primary">Related Articles</h2>
-          <div className="space-y-6">
-            {relatedArticles.length > 0 ? (
-              relatedArticles.map((related) => (
-                <div
-                  key={related._id}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200"
-                >
-                  {related.thumbnail && (
-                    <Image
-                      src={`${process.env.NEXT_PUBLIC_API_HOST}${related.thumbnail}`}
-                      alt={related.title}
-                      width={300}
-                      height={120}
-                      className="w-full h-36 object-cover rounded-lg mb-4"
-                    />
-                  )}
-                  <Link href={`/news/${related.slug}`} className="text-primary-light hover:text-primary-dark transition-colors duration-200">
-                    <h3 className="text-base font-semibold mb-2">{related.title}</h3>
-                  </Link>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">{related.shortDescription}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500 font-medium">
-                    {formatDate(related.publishedAt)}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-gray-600 dark:text-gray-400">No related articles available.</p>
-            )}
-          </div>
-        </aside>
+          </aside>
+          
+        </div>
       </div>
     </div>
   );
