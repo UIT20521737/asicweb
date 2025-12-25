@@ -1,42 +1,11 @@
-// components/LabDutyCalendar.js
 "use client";
 import { useState, useEffect } from 'react';
 
-// Dữ liệu giả lập cho lịch trực
 const dummyDutyEvents = [
-  // Roster for Phát (morning and afternoon)
-  { day: 'Monday', time: '07:30', duration: 4, title: 'Phát' },
-  { day: 'Monday', time: '13:30', duration: 3, title: 'Phát' },
-  { day: 'Tuesday', time: '07:30', duration: 4, title: 'Phát' },
-  { day: 'Tuesday', time: '13:30', duration: 3, title: 'Phát' },
-  { day: 'Wednesday', time: '07:30', duration: 4, title: 'Phát' },
-  { day: 'Wednesday', time: '13:30', duration: 3, title: 'Phát' },
-  { day: 'Thursday', time: '07:30', duration: 4, title: 'Phát' },
-  { day: 'Thursday', time: '13:30', duration: 3, title: 'Phát' },
-  { day: 'Friday', time: '07:30', duration: 4, title: 'Phát' },
-  { day: 'Friday', time: '13:30', duration: 3, title: 'Phát' },
-
-  // Roster for Thịnh (morning and afternoon)
-  { day: 'Monday', time: '07:30', duration: 4, title: 'Thịnh' },
-  { day: 'Monday', time: '13:30', duration: 3, title: 'Thịnh' },
-  { day: 'Tuesday', time: '07:30', duration: 4, title: 'Thịnh' },
-  { day: 'Tuesday', time: '13:30', duration: 3, title: 'Thịnh' },
-  { day: 'Wednesday', time: '07:30', duration: 4, title: 'Thịnh' },
-  { day: 'Wednesday', time: '13:30', duration: 3, title: 'Thịnh' },
-  { day: 'Thursday', time: '07:30', duration: 4, title: 'Thịnh' },
-  { day: 'Thursday', time: '13:30', duration: 3, title: 'Thịnh' },
-  { day: 'Friday', time: '07:30', duration: 4, title: 'Thịnh' },
-  { day: 'Friday', time: '13:30', duration: 3, title: 'Thịnh' },
-
-  // Roster for Đức (morning and afternoon)
-  { day: 'Friday', time: '07:30', duration: 4, title: 'Đức' },
-  { day: 'Friday', time: '13:30', duration: 3, title: 'Đức' },
+  { day: 'Monday', time: '08:30', duration: 2, title: 'Research Meeting' },
+  { day: 'Wednesday', time: '09:00', duration: 1.5, title: 'Internship Evaluation' },
+  { day: 'Friday', time: '08:00', duration: 2, title: 'Lab Operations Meeting' },
 ];
-
-const fetchDutyEventsFromServer = async (url) => {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return dummyDutyEvents;
-};
 
 const getStartOfWeek = (date) => {
   const day = date.getDay();
@@ -49,29 +18,29 @@ const timeToMinutes = (time) => {
   return hours * 60 + minutes;
 };
 
-const formatTimeRange = (time, duration) => {
-  const startHours = timeToMinutes(time) / 60;
-  const endHours = startHours + duration;
-  const endMinutes = (endHours % 1) * 60;
-  const endHourFormatted = Math.floor(endHours).toString().padStart(2, '0');
-  const endMinutesFormatted = Math.round(endMinutes).toString().padStart(2, '0');
-  return `${time} - ${endHourFormatted}:${endMinutesFormatted}`;
-};
-
-export default function LabDutyCalendar({ url }) {
+export default function LabDutyCalendar() {
   const [currentDate, setCurrentDate] = useState(getStartOfWeek(new Date()));
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const timeSlots = [
+    { name: 'Morning', label: 'Morning' },
+    { name: 'Afternoon', label: 'Afternoon' }
+  ];
 
-  const morningStartTime = 7.5;
-  const afternoonStartTime = 13.5;
-
-  const timeSlots = ['Morning', 'Afternoon'];
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setEvents(dummyDutyEvents);
+      setIsLoading(false);
+    };
+    fetchEvents();
+  }, [currentDate]);
 
   const getWeekdays = () => {
-    const startOfWeek = getStartOfWeek(currentDate);
+    const startOfWeek = getStartOfWeek(new Date(currentDate));
     return weekdays.map((day, index) => {
       const date = new Date(startOfWeek);
       date.setDate(startOfWeek.getDate() + index);
@@ -80,135 +49,123 @@ export default function LabDutyCalendar({ url }) {
         shortName: day.substring(0, 3),
         date: date.getDate(),
         month: date.getMonth() + 1,
-        year: date.getFullYear(),
       };
     });
   };
 
-  const goToPreviousWeek = () => {
+  const changeWeek = (offset) => {
     const newDate = new Date(currentDate);
-    newDate.setDate(newDate.getDate() - 7);
+    newDate.setDate(newDate.getDate() + offset);
     setCurrentDate(newDate);
   };
-
-  const goToNextWeek = () => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(newDate.getDate() + 7);
-    setCurrentDate(newDate);
-  };
-
-  const getWeekRange = () => {
-    const start = getWeekdays()[0];
-    const end = getWeekdays()[6];
-    const startDate = `${start.name}, ${start.date}/${start.month}`;
-    const endDate = `${end.name}, ${end.date}/${end.month}`;
-    return `${startDate} - ${endDate} - ${end.year}`;
-  };
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setIsLoading(true);
-      const data = await fetchDutyEventsFromServer(url);
-      setEvents(data);
-      setIsLoading(false);
-    };
-    fetchEvents();
-  }, [currentDate, url]);
 
   const groupedEvents = weekdays.reduce((acc, day) => {
-    const morningEvents = events.filter(e => e.day === day && timeToMinutes(e.time) === morningStartTime * 60);
-    const afternoonEvents = events.filter(e => e.day === day && timeToMinutes(e.time) === afternoonStartTime * 60);
     acc[day] = {
-      morning: morningEvents,
-      afternoon: afternoonEvents,
+      morning: events.filter(e => e.day === day && timeToMinutes(e.time) < 720),
+      afternoon: events.filter(e => e.day === day && timeToMinutes(e.time) >= 720),
     };
     return acc;
   }, {});
 
   return (
-    <div className="bg-background rounded-lg shadow-xl p-4 sm:p-6 overflow-hidden flex flex-col h-full">
-      {/* Navigation Header */}
-      <div className="flex justify-center items-center mb-4">
-        <span className="text-xl font-bold text-foreground">
-          {getWeekRange()}
-        </span>
+    <div className="w-full h-full font-sans text-slate-900 dark:text-slate-100">
+      
+      {/* 1. Header Điều hướng */}
+      <div className="flex flex-col sm:flex-row justify-between items-end mb-6 gap-4 px-1">
+        <div>
+          <h2 className="text-3xl font-black tracking-tighter uppercase italic leading-none text-slate-900 dark:text-white">Lab Calendar</h2>
+          <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mt-2 ml-1 italic">Weekly Fixed Schedule</p>
+        </div>
+        
+        <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+          <button onClick={() => changeWeek(-7)} className="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all font-bold text-slate-400">←</button>
+          <span className="px-4 text-[9px] font-black text-slate-500 dark:text-slate-400 min-w-[150px] text-center uppercase tracking-widest">
+            {getWeekdays()[0].date}/{getWeekdays()[0].month} — {getWeekdays()[6].date}/{getWeekdays()[6].month}
+          </span>
+          <button onClick={() => changeWeek(7)} className="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all font-bold text-slate-400">→</button>
+        </div>
       </div>
 
-      {/* Grid Header with Days of the Week */}
-      <div className="grid grid-cols-8 gap-1 border-b border-border mb-4">
-        <div className="py-2 text-center text-foreground font-semibold"></div>
-        {getWeekdays().map(day => (
-          <div key={day.name} className="py-2 text-center text-foreground font-semibold">
-            <div className="text-sm font-normal hidden sm:block">
-              {day.name}
-            </div>
-            <div className="text-sm font-normal sm:hidden">
-              {day.shortName}
-            </div>
-            <div className="text-lg font-bold">{day.date}</div>
+      {/* 2. Grid Table - Chia cột rõ ràng */}
+      <div className="rounded-[2rem] overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+        
+        {/* Day Header */}
+        <div className="grid grid-cols-8 bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800">
+          <div className="p-4 border-r border-slate-200 dark:border-slate-800 flex items-center justify-center">
+             <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
           </div>
-        ))}
-      </div>
-
-      {/* Grid for Time Slots and Events */}
-      <div className="grid grid-cols-8 gap-1 flex-grow overflow-y-auto">
-        {isLoading ? (
-          <div className="col-span-8 flex items-center justify-center p-8 text-foreground absolute inset-0 bg-background/80 z-10">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Loading Events...
-          </div>
-        ) : (
-          timeSlots.map(timeSlot => (
-            <div key={timeSlot} className="contents">
-              {/* Cell for the time slot name */}
-              <div className="col-span-1 text-right pr-2 text-primary-light text-sm flex items-center justify-end">
-                <span className="hidden sm:inline">{timeSlot}</span>
-                <span className="sm:hidden">{timeSlot.charAt(0)}</span>
+          {getWeekdays().map((day, index) => {
+            const isMeetingDay = ['Monday', 'Wednesday', 'Friday'].includes(day.name);
+            return (
+              <div 
+                key={day.name} 
+                className={`p-4 text-center border-r last:border-r-0 border-slate-200 dark:border-slate-800 
+                  ${isMeetingDay ? 'bg-primary/[0.04]' : 'bg-transparent'}`}
+              >
+                <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{day.shortName}</div>
+                <div className={`text-xl font-black mt-1 ${isMeetingDay ? 'text-primary' : 'text-slate-300 opacity-40'}`}>{day.date}</div>
               </div>
-              {/* Cells for duty roster members */}
-              {weekdays.map(day => (
-                <div
-                  key={`${day}-${timeSlot}`}
-                  className="col-span-1 p-1 sm:p-2 border-b border-r border-border flex flex-col justify-start items-center text-center text-txt-primary"
-                >
-                  {/* Display Morning shift events */}
-                  {timeSlot === 'Morning' && groupedEvents[day].morning.map(event => (
-                    <div key={event.title} className="bg-green-500 rounded-md p-1 mb-1 w-full text-white">
-                      <div className="font-semibold text-xs sm:text-sm hidden sm:block">{event.title}</div>
-                      <div className="font-semibold text-xs sm:text-sm sm:hidden">{event.title.charAt(0)}</div>
-                      <div className="text-xs text-opacity-75 hidden sm:block">
-                        {formatTimeRange(event.time, event.duration)}
+            );
+          })}
+        </div>
+
+        {/* Content Rows */}
+        <div className="relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-white/60 dark:bg-slate-950/60 backdrop-blur-sm z-20 flex items-center justify-center font-black text-[9px] uppercase tracking-widest text-primary">Refreshing...</div>
+          )}
+
+          {timeSlots.map(slot => (
+            <div key={slot.name} className="grid grid-cols-8 border-b last:border-0 border-slate-200 dark:border-slate-800 min-h-[160px]">
+              {/* Cột Shift Label dọc */}
+              <div className="p-4 flex flex-col justify-center items-center border-r border-slate-200 dark:border-slate-800 bg-slate-50/30">
+                <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400 -rotate-90 whitespace-nowrap">{slot.label}</span>
+              </div>
+
+              {/* Dữ liệu từng cột ngày */}
+              {weekdays.map((day, index) => {
+                const dayEvents = slot.name === 'Morning' ? groupedEvents[day].morning : groupedEvents[day].afternoon;
+                const isMeetingDay = ['Monday', 'Wednesday', 'Friday'].includes(day);
+
+                return (
+                  <div 
+                    key={`${day}-${slot.name}`} 
+                    className={`p-2 border-r last:border-r-0 border-slate-200 dark:border-slate-800 flex flex-col gap-2 transition-all
+                      ${isMeetingDay ? 'bg-primary/[0.02]' : 'bg-transparent opacity-10'}
+                    `}
+                  >
+                    {dayEvents.map((event, i) => (
+                      <div 
+                        key={i}
+                        className="bg-primary text-white p-3 rounded-2xl shadow-lg shadow-primary/20 hover:scale-[1.05] transition-all cursor-default border border-white/10"
+                      >
+                        <div className="text-[7px] font-black uppercase tracking-widest opacity-80 mb-1 leading-none">
+                            {event.time} AM
+                        </div>
+                        <div className="text-[10px] font-black leading-tight uppercase tracking-tight">
+                            {event.title}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                  {/* Display Afternoon shift events */}
-                  {timeSlot === 'Afternoon' && groupedEvents[day].afternoon.map(event => (
-                    <div key={event.title} className="bg-green-500 rounded-md p-1 mb-1 w-full text-white">
-                      <div className="font-semibold text-xs sm:text-sm hidden sm:block">{event.title}</div>
-                      <div className="font-semibold text-xs sm:text-sm sm:hidden">{event.title.charAt(0)}</div>
-                      <div className="text-xs text-opacity-75 hidden sm:block">
-                        {formatTimeRange(event.time, event.duration)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
+                    ))}
+                  </div>
+                );
+              })}
             </div>
-          ))
-        )}
+          ))}
+        </div>
       </div>
 
-      {/* Navigation Footer */}
-      <div className="flex justify-between items-center mt-4">
-        <button onClick={goToPreviousWeek} className="p-2 rounded-lg bg-muted transition-colors cursor-pointer text-white bg-primary hover:bg-accent-hover hover:text-white">
-          Previous Week
-        </button>
-        <button onClick={goToNextWeek} className="p-2 rounded-lg bg-muted transition-colors cursor-pointer text-white bg-primary hover:bg-accent-hover hover:text-white">
-          Next Week
-        </button>
+      {/* Footer Info */}
+      <div className="mt-4 flex justify-between items-center px-4">
+        <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest text-primary">
+            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+            Meeting Scheduled
+          </div>
+        </div>
+        <p className="text-[8px] font-black text-slate-300 italic uppercase tracking-[0.3em]">
+          Internal Lab Access
+        </p>
       </div>
     </div>
   );

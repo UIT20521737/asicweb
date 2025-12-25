@@ -18,14 +18,7 @@ export default function Calendar() {
 
       {/* Các nút liên kết Google Forms/Sheets */}
       <div className="flex justify-center space-x-4 mt-6 mb-10 mx-4">
-        <a
-          href={googleSheetUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-btn-url hover:bg-btn-url-hover font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
-        >
-          View Lab Schedule
-        </a>
+        
         <a
           href={googleFormsUrl}
           target="_blank"

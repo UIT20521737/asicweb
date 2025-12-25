@@ -14,41 +14,15 @@ export default function CalendarList() {
   return (
     <>  
         {/* Các nút chuyển đổi */}
-        <div className="flex justify-center space-x-4 mt-10">
-        
-            <button
-            onClick={() => setActiveTab('roster')}
-            className={`cursor-pointer px-6 py-3 font-bold rounded-lg transition-colors ${
-                activeTab === 'roster' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'
-            }`}
-            >
-            Lab Duty Roster
-            </button>
-            <button
-            onClick={() => setActiveTab('activities')}
-            className={`cursor-pointer px-6 py-3 font-bold rounded-lg transition-colors ${
-                activeTab === 'activities' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'
-            }`}
-            >
-            Lab Activities
-            </button>
-        </div>
+       
 
         
         {/* Container with a fixed height and responsive padding */}
         <div className="p-4 sm:p-6 mx-auto  overflow-hidden min-h-[500px] max-h-[750px] max-w-7xl">
-            {activeTab === 'activities' && (
-            <>
-                <h2 className="text-3xl font-bold mb-4 text-primary my-10">Lab Activities</h2>
-                <div className="flex-grow">
-                <CustomCalendar url={labActivitiesUrl} />
-                </div>
-            </>
-            )}
+            
 
             {activeTab === 'roster' && (
             <>
-                <h2 className="text-3xl font-bold mb-4 text-primary my-10">Lab Duty Roster</h2>
                 <div className="flex-grow">
                 <LabDutyCalendar url={labDutyRosterUrl} />
                 </div>
