@@ -4,6 +4,7 @@ import ResearchDirections from "@/components/ResearchDirections";
 import SupportingActivities from "@/components/SupportingActivities";
 import TeamMembers from "@/components/TeamMembers";
 import MissionVision from "@/components/MissionVision";
+import OurServices from '@/components/OurServices';
 
 export default function Home() {
   const structuredData = {
@@ -55,6 +56,7 @@ export default function Home() {
         <AboutUs />
         <MissionVision />
         <ResearchDirections />
+        <OurServices />
         <SupportingActivities />
         <TeamMembers />
       </main>
