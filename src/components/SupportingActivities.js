@@ -1,3 +1,6 @@
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
 import { BookOpen, Users, Globe, ChevronRight } from "lucide-react";
 
 const supportingActivities = [
@@ -26,64 +29,56 @@ const supportingActivities = [
 
 const SupportingActivities = () => {
   return (
-    <section className="py-24 relative bg-[#fcfcfc] overflow-hidden border-y border-gray-100">
-      {/* Ambient Glows - Tạo chiều sâu nhẹ nhàng cho nền */}
-      <div className="absolute top-0 right-0 w-[30%] h-[30%] bg-blue-50 blur-[100px] -z-10"></div>
-      <div className="absolute bottom-0 left-0 w-[30%] h-[30%] bg-emerald-50 blur-[100px] -z-10"></div>
-
+    <section className="pt-4 pb-2 md:pt-8 md:pb-4 relative bg-white overflow-hidden border-y border-gray-100 antialiased">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tighter uppercase">
-            Supporting <span className="text-[var(--color-primary)]">Activities</span>
+        {/* Header - Thu nhỏ margin-bottom */}
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          className="text-center mb-8 md:mb-10"
+        >
+          <h2 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tighter uppercase leading-none">
+            Supporting <span className="text-[#047857]">Activities</span>
           </h2>
-          <div className="h-1 w-16 bg-gray-200 mx-auto mt-4 rounded-full"></div>
-        </div>
+          <div className="h-1 w-10 bg-[#047857] mx-auto mt-2 rounded-full"></div>
+        </motion.div>
 
-        {/* Activities Grid */}
-        <div className="grid md:grid-cols-3 gap-10">
+        {/* Grid Container */}
+        <div className="grid md:grid-cols-3 gap-6">
           {supportingActivities.map((act) => (
-            <div 
+            <motion.div 
               key={act.id} 
-              className={`group relative bg-white/70 backdrop-blur-xl p-10 rounded-[3rem] border border-white shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl ${act.glow} hover:border-[var(--color-primary)]/30`}
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }}
+              className="group relative bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:border-[#047857]/20"
             >
-              {/* Icon Container */}
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 mb-8 relative flex items-center justify-center">
-                  {/* Lớp nền icon biến đổi khi hover */}
-                  <div className="absolute inset-0 bg-gray-50 rounded-3xl rotate-6 transition-all duration-500 group-hover:rotate-0 group-hover:bg-[var(--color-primary)] group-hover:shadow-lg group-hover:shadow-[var(--color-primary)]/30"></div>
-                  
-                  <div className="relative z-10 text-gray-400 transition-colors duration-500 group-hover:text-white">
-                    <act.icon className="w-9 h-9" />
-                  </div>
+                {/* Icon Box - Thu nhỏ nhẹ tỉ lệ */}
+                <div className="w-14 h-14 md:w-16 md:h-16 mb-5 md:mb-6 relative flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gray-50 rounded-2xl rotate-6 transition-all group-hover:rotate-0 group-hover:bg-[#047857]"></div>
+                  <act.icon className="relative z-10 w-7 h-7 md:w-8 md:h-8 text-gray-400 group-hover:text-white transition-colors" />
                 </div>
 
-                <h3 className="text-2xl font-black text-gray-900 mb-8 uppercase tracking-tight text-center">
+                {/* Title */}
+                <h3 className="text-base md:text-lg font-black text-gray-900 mb-4 md:mb-6 uppercase tracking-tight text-center leading-tight">
                   {act.title}
                 </h3>
-                
-                <ul className="space-y-4 w-full">
+
+                {/* List Items */}
+                <ul className="space-y-1.5 md:space-y-2 w-full">
                   {act.items.map((item, i) => (
                     <li 
                       key={i} 
-                      className="group/item flex items-center p-3 rounded-2xl bg-gray-50/50 border border-transparent transition-all duration-300 hover:bg-white hover:border-[var(--color-primary)]/20 hover:shadow-sm"
+                      className="flex items-center p-2 md:p-3 rounded-xl bg-gray-50/50 text-[11px] md:text-[13px] font-bold text-gray-600 group-hover:bg-white transition-all uppercase"
                     >
-                      <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm transition-colors group-hover/item:bg-[var(--color-primary)]">
-                        <ChevronRight className="w-3.5 h-3.5 text-gray-400 group-hover/item:text-white transition-colors" />
-                      </div>
-                      <span className="text-sm font-bold text-gray-600 group-hover/item:text-gray-900 transition-colors tracking-tight">
-                        {item}
-                      </span>
+                      <ChevronRight className="w-3 md:w-3.5 h-3 md:h-3.5 mr-2 text-[#047857]" /> {item}
                     </li>
                   ))}
                 </ul>
               </div>
-
-              {/* Trang trí watermark ẩn dưới card */}
-              <div className="absolute -bottom-4 -right-4 opacity-[0.03] group-hover:opacity-10 transition-opacity duration-700 pointer-events-none">
-                <act.icon className="w-32 h-32" />
-              </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

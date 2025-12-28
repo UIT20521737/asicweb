@@ -1,89 +1,129 @@
+"use client";
 import React from "react";
+import { motion } from "framer-motion";
 
 const AboutUs = () => {
+  // Cấu hình hiệu ứng xuất hiện linh hoạt theo màn hình
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+  };
+
   return (
-    <section className="py-16 bg-white overflow-hidden antialiased">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-12 gap-16 items-center">
+    <section className="pt-8 pb-4 md:pt-16 md:pb-8 bg-white overflow-hidden antialiased">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="grid lg:grid-cols-12 gap-6 md:gap-10 items-center">
           
           {/* CỘT TRÁI: THÔNG TIN CHIẾN LƯỢC */}
-          <div className="lg:col-span-7 relative">
-            <div className="absolute -top-16 -left-10 text-[10rem] font-black text-gray-50 select-none -z-10 tracking-tighter opacity-70">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="lg:col-span-7 relative"
+          >
+            {/* Chữ UIT khổng lồ - Thu nhỏ lại đáng kể */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 0.4, scale: 1 }}
+              transition={{ duration: 1.2 }}
+              className="absolute -top-8 md:-top-16 -left-4 md:-left-8 text-[4rem] md:text-[8rem] font-black text-gray-50 select-none -z-10 tracking-tighter"
+            >
               UIT
-            </div>
+            </motion.div>
             
             <div className="relative z-10">
-              <h1 className="text-5xl sm:text-7xl font-black text-gray-900 tracking-tighter uppercase mb-6 leading-none">
-                ASIC <span className="text-[var(--color-primary)] italic">LAB</span>
-              </h1>
+              <motion.h1 
+                variants={fadeInUp}
+                className="text-3xl sm:text-5xl md:text-6xl font-[1000] text-gray-900 tracking-tighter uppercase mb-4 md:mb-6 leading-none"
+              >
+                ASIC <span className="text-[#047857]">LAB</span>
+              </motion.h1>
               
-              <div className="space-y-6">
-                <p className="text-2xl sm:text-3xl text-gray-800 leading-tight font-bold">
-                  The Hub of <span className="text-[var(--color-primary)]">IC Design Excellence</span> at UIT.
+              <motion.div variants={fadeInUp} className="space-y-4 md:space-y-6">
+                <p className="text-lg sm:text-xl md:text-3xl text-gray-800 leading-tight font-black tracking-tight">
+                  The Hub of <span className="text-[#047857]">IC Design Excellence</span> at UIT.
                 </p>
                 
-                <div className="h-1.5 w-24 bg-[var(--color-primary)] rounded-full"></div>
+                <motion.div 
+                  initial={{ width: 0 }}
+                  whileInView={{ width: 48 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="h-1 md:h-1.5 bg-[#047857] rounded-full"
+                ></motion.div>
                 
-                <div className="space-y-5 max-w-2xl text-gray-600">
-                  <p className="text-lg leading-relaxed">
+                <div className="space-y-3 md:space-y-4 max-w-xl text-gray-600 font-bold text-sm md:text-base leading-relaxed">
+                  <p>
                     ASIC LAB UIT is a specialized research unit focused on the entire lifecycle of **Application-Specific Integrated Circuits** — from architectural definition to physical implementation.
                   </p>
-                  <p className="text-lg leading-relaxed font-medium">
-                    We empower students and researchers to master industry-standard EDA tools and methodologies, bridging the gap between academic theory and Silicon reality.
+                  <p className="hidden sm:block">
+                    We empower students and researchers to master industry-standard EDA tools, bridging the gap between academic theory and Silicon reality.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* CỘT PHẢI: BẢN SẮC KỸ THUẬT (CHIP VIBE) */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative aspect-square sm:aspect-[4/5] lg:aspect-square bg-slate-950 rounded-[3rem] overflow-hidden shadow-2xl border-[8px] border-white group">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-5 relative mt-6 lg:mt-0"
+          >
+            <div className="relative aspect-square bg-slate-950 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-xl border-[4px] md:border-[8px] border-white group">
               
-              {/* Lưới tọa độ (Grid) mô phỏng môi trường thiết kế vi mạch chuyên nghiệp */}
-              <div className="absolute inset-0 opacity-20" 
+              {/* Lưới tọa độ (Grid) */}
+              <div className="absolute inset-0 opacity-10 md:opacity-15" 
                    style={{ 
                      backgroundImage: 'linear-gradient(#444 1px, transparent 1px), linear-gradient(90deg, #444 1px, transparent 1px)', 
-                     backgroundSize: '30px 30px' 
+                     backgroundSize: '25px 25px' 
                    }}>
               </div>
 
-              {/* Đường dẫn mạch điện (Traces) - Biểu tượng của sự kết nối tri thức */}
+              {/* Đường dẫn mạch điện */}
               <div className="absolute inset-0">
-                <div className="absolute top-1/3 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent"></div>
-                <div className="absolute top-2/3 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
-                <div className="absolute left-1/2 top-0 w-[1px] h-full bg-gradient-to-b from-transparent via-emerald-500/40 to-transparent"></div>
+                <div className="absolute top-1/3 left-0 w-full h-[1px] bg-emerald-500/15"></div>
+                <div className="absolute left-1/2 top-0 w-[1px] h-full bg-emerald-500/15"></div>
               </div>
 
-              {/* Khối trung tâm: Biểu tượng con chip chủ đạo */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <div className="w-36 h-36 mb-6 border-2 border-[var(--color-primary)] rounded-3xl flex items-center justify-center relative bg-slate-900/50 backdrop-blur-md group-hover:scale-105 transition-transform duration-700">
-                  {/* Các chi tiết vi mạch mô phỏng bên trong chip */}
-                  <div className="absolute inset-3 border border-[var(--color-primary)]/20 rounded-xl"></div>
-                  <div className="absolute inset-6 border border-[var(--color-primary)]/10 rounded-lg"></div>
+              {/* Khối trung tâm: Con chip chủ đạo - Thu nhỏ lại */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center">
+                <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className="w-28 h-28 md:w-36 md:h-36 mb-4 md:mb-6 border-2 border-[#047857] rounded-2xl md:rounded-[2rem] flex items-center justify-center relative bg-slate-900/60 backdrop-blur-md transition-all duration-500"
+                >
+                  <div className="absolute inset-2 md:inset-3 border border-[#047857]/20 rounded-lg md:rounded-xl animate-pulse"></div>
                   
                   <div className="relative z-10 flex flex-col items-center">
-                    <span className="text-white font-black text-2xl tracking-tighter italic leading-none">ASIC</span>
-                    <span className="text-[var(--color-primary)] font-black text-xs tracking-widest mt-1">CORE</span>
+                    <span className="text-white font-[1000] text-xl md:text-2xl tracking-tighter leading-none">ASIC</span>
+                    <span className="text-[#047857] font-black text-[7px] md:text-[9px] tracking-[0.4em] mt-1 uppercase">Core</span>
                   </div>
-                </div>
+                </motion.div>
                 
-                <div className="space-y-2 relative z-20">
-                  <p className="text-[var(--color-primary)] font-black text-[10px] uppercase tracking-[0.4em]">Front-end to Back-end</p>
-                  <p className="text-slate-400 text-[9px] uppercase tracking-[0.2em] font-medium">System-on-Chip • VLSI • FPGA</p>
+                <div className="space-y-1 md:space-y-2">
+                  <p className="text-[#047857] font-black text-[9px] uppercase tracking-[0.4em]">Design to Silicon</p>
+                  <p className="text-slate-500 text-[8px] uppercase tracking-[0.2em] font-bold">SoC • VLSI • FPGA</p>
                 </div>
               </div>
 
-              {/* Hiệu ứng quét sáng (Scanner effect) chạy qua lại nhẹ nhàng */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--color-primary)]/5 to-transparent h-1/2 w-full -translate-y-full group-hover:animate-[scan_3s_linear_infinite] pointer-events-none"></div>
+              {/* Scanner Effect */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#047857]/5 to-transparent h-1/2 w-full -translate-y-full group-hover:animate-[scan_3s_linear_infinite] pointer-events-none"></div>
             </div>
 
-            {/* Đốm màu loang tạo độ sâu (Depth) cho khối thiết kế */}
-            <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-[var(--color-primary)] opacity-[0.08] blur-[120px] -z-10"></div>
-          </div>
+            {/* Ambient Glow */}
+            <div className="absolute -bottom-8 -right-8 w-48 h-48 bg-[#047857]/10 blur-[80px] -z-10"></div>
+          </motion.div>
 
         </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes scan {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(200%); }
+        }
+      `}} />
     </section>
   );
 };

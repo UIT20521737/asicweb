@@ -91,11 +91,11 @@ export default async function TeamMembers() {
   );
 
   return (
-    <section className="py-24 bg-white antialiased">
+    <section className="pt-4 pb-2 bg-white antialiased">
       <div className="max-w-7xl mx-auto px-6">
         
         {partners.length > 0 && (
-          <div className="mb-32">
+          <div className="mb-10">
             <h2 className="text-2xl sm:text-3xl font-black text-gray-900 text-center mb-16 uppercase tracking-tight">
               Strategic <span className="text-[var(--color-primary)]">Partnerships</span>
             </h2>
@@ -105,9 +105,9 @@ export default async function TeamMembers() {
           </div>
         )}
 
-        <div className="pt-20 border-t border-gray-200 text-center">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 text-center mb-20 uppercase tracking-tight italic">Our Team</h2>
-          <div className="flex flex-wrap justify-center gap-12 mb-20">{directors.map(renderMember)}</div>
+        <div className="pt-4 border-t border-gray-200 text-center">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 text-center mb-2 uppercase tracking-tight italic">Our Team</h2>
+          <div className="flex flex-wrap justify-center gap-12 mb-">{directors.map(renderMember)}</div>
           <div className="space-y-24">
             {officialStaff.length > 0 && (<div><SubGroupTitle>Core Researchers</SubGroupTitle><div className="flex flex-wrap justify-center gap-x-8 gap-y-12">{officialStaff.map(renderMember)}</div></div>)}
             {collaborators.length > 0 && (<div><SubGroupTitle>External Collaborators</SubGroupTitle><div className="flex flex-wrap justify-center gap-x-8 gap-y-12">{collaborators.map(renderMember)}</div></div>)}

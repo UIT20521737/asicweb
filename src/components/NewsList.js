@@ -1,4 +1,3 @@
-import { API_HOST } from '@/data/apihost';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -11,194 +10,139 @@ async function fetchNews() {
     if (!res.ok) {
       throw new Error(`Failed to fetch news: HTTP ${res.status}`);
     }
-    const {data} = await res.json();
-    console.log('Fetched news data:', data);
-    // Validate response is an array
-    if (!Array.isArray(data)) {
-      console.error('API response is not an array:', data);
-      return [];
-    }
+    const { data } = await res.json();
+    if (!Array.isArray(data)) return [];
     return data;
   } catch (error) {
     console.error('Error fetching news:', error.message);
-    return null; // Return null to indicate error
+    return null;
   }
 }
 
-// Helper function to get full thumbnail URL
 function getThumbnailUrl(thumbnail) {
   if (!thumbnail) return null;
   if (thumbnail.startsWith('http')) return thumbnail;
   return `${process.env.NEXT_PUBLIC_API_HOST}${thumbnail}`;
 }
 
-// Thumbnail Image Component
-function ThumbnailImage({ src, alt, className }) {
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      loading="lazy"
-    />
-  );
-}
-
-// Fallback Icon Component
-function FallbackIcon({ className = "w-16 h-16" }) {
-  return (
-    <svg className={`${className} text-gray-300`} fill="currentColor" viewBox="0 0 20 20">
-      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-    </svg>
-  );
-}
-
-export default async function NewsList() {
+export default async function NewsListPage() {
   const articles = await fetchNews();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Header Section */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="container mx-auto px-4 py-12 max-w-7xl">
-          <div className="text-center space-y-3">
-            <h1 className="text-5xl md:text-6xl text-primary font-bold tracking-tight text-gray-900">
-              News
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Stay informed with our curated selection of the most important stories
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Content Section */}
-      <div className="container mx-auto px-4 py-12 max-w-7xl">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-slate-950 font-sans pb-32">
+      <div className="container mx-auto px-4 max-w-7xl pt-16">
+        
         {!articles ? (
-          <div className="flex items-center justify-center p-12 bg-red-50 border border-red-200 rounded-2xl">
-            <div className="text-center">
-              <svg className="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div className="flex flex-col items-center justify-center p-20 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="w-16 h-16 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-6 ring-8 ring-red-50/50 dark:ring-red-900/10">
+              <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-red-800 font-semibold text-lg">Error loading news</p>
-              <p className="text-red-600 mt-2">Please try again later</p>
             </div>
+            <p className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Unable to reach our stories</p>
+            <p className="text-slate-500 mt-2 text-sm">Please refresh or check back in a moment.</p>
           </div>
         ) : articles.length === 0 ? (
-          <div className="flex items-center justify-center p-12 bg-gray-50 border border-gray-200 rounded-2xl">
-            <div className="text-center">
-              <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-              </svg>
-              <p className="text-gray-700 font-semibold text-lg">No news available</p>
-              <p className="text-gray-500 mt-2">Check back soon for updates</p>
-            </div>
+          <div className="flex flex-col items-center justify-center p-20 opacity-60">
+            <div className="w-px h-20 bg-gradient-to-b from-transparent via-slate-300 to-transparent mb-8" />
+            <p className="text-slate-400 font-medium tracking-widest uppercase text-[10px]">The archives are currently empty</p>
           </div>
         ) : (
-          <>
-            {/* Featured Article (First Article) */}
+          <div className="space-y-24">
+            
+            {/* 1. Featured Article - Tin nổi bật */}
             {articles.length > 0 && (
-              <Link href={`/news/${articles[0]?.slug}`} className="block group mb-12">
-                <div className="relative overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl">
-                  <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
-                    <div className="flex flex-col justify-center space-y-6">
-                      <div className="inline-flex items-center space-x-2">
-                        <span className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full uppercase tracking-wide">
-                          NEWEST
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {new Date(articles[0].createdAt).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                          })}
-                        </span>
-                      </div>
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight group-hover:text-primary transition-colors">
-                        {articles[0].title || 'Untitled'}
-                      </h2>
-                      <p className="text-lg text-gray-600 leading-relaxed line-clamp-3">
-                        {articles[0].shortDescription || 'No description available.'}
-                      </p>
-                      <div className="flex items-center text-primary font-semibold group-hover:gap-3 gap-2 transition-all">
-                        <span>Read More</span>
-                        <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="hidden md:flex items-center justify-center">
+              <section className="relative group">
+                <Link href={`/news/${articles[0].slug}`} className="block relative">
+                  <div className="grid lg:grid-cols-12 gap-0 overflow-hidden rounded-[2.5rem] bg-white dark:bg-slate-900 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.06)] dark:shadow-none border border-white dark:border-slate-800">
+                    <div className="lg:col-span-7 relative aspect-[16/10] lg:aspect-auto overflow-hidden">
                       {getThumbnailUrl(articles[0].thumbnail) ? (
-                        <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
-                          <ThumbnailImage
-                            src={getThumbnailUrl(articles[0].thumbnail)}
-                            alt={articles[0].title}
-                            className="w-full h-full object-contain transition-transform group-hover:scale-105"
-                          />
-                        </div>
+                        <Image
+                          src={getThumbnailUrl(articles[0].thumbnail)}
+                          alt={articles[0].title}
+                          fill
+                          className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                          priority
+                        />
                       ) : (
-                        <div className="w-full aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center">
-                          <FallbackIcon className="w-24 h-24" />
-                        </div>
+                        <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center" />
                       )}
+                      <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+                    </div>
+                    
+                    <div className="lg:col-span-5 p-8 md:p-10 lg:p-12 flex flex-col justify-center relative bg-white dark:bg-slate-900">
+                      <div className="mb-6 flex items-center gap-3">
+                        <span className="h-px w-6 bg-primary/30" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-primary">Featured Story</span>
+                      </div>
+                      
+                      <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white leading-[1.1] mb-6 tracking-tighter transition-colors group-hover:text-primary">
+                        {articles[0].title}
+                      </h2>
+                      
+                      <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8 line-clamp-3 font-medium">
+                        {articles[0].shortDescription || 'An insightful look into today\'s most compelling narrative.'}
+                      </p>
+                      
+                      <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-50 dark:border-slate-800">
+                        <time className="text-[9px] font-bold text-slate-400 uppercase tracking-widest" suppressHydrationWarning>
+                          {new Date(articles[0].createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                        </time>
+                        <div className="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-700 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500">
+                          <svg className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </section>
             )}
 
-            {/* Grid Articles */}
+            {/* 2. Grid Articles - Danh sách tin phía dưới */}
             {articles.length > 1 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
                 {articles.slice(1).map((article) => {
-                  const date = new Date(article.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  });
                   const thumbnailUrl = getThumbnailUrl(article.thumbnail);
-                  
                   return (
-                    <Link key={article._id} href={`/news/${article?.slug}`} className="block group">
-                      <article className="h-full bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                        {/* Image */}
-                        <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center overflow-hidden">
-                          {thumbnailUrl ? (
-                            <ThumbnailImage
-                              src={thumbnailUrl}
-                              alt={article.title}
-                              className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                            />
-                          ) : (
-                            <FallbackIcon className="w-16 h-16 transition-transform group-hover:scale-110" />
-                          )}
+                    <Link key={article._id} href={`/news/${article.slug}`} className="group flex flex-col h-full">
+                      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2.5rem] bg-white dark:bg-slate-900 mb-8 shadow-[0_12px_24px_-10px_rgba(0,0,0,0.05)] border border-white dark:border-slate-800 transition-all duration-500 group-hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.08)] group-hover:-translate-y-1.5">
+                        {thumbnailUrl ? (
+                          <Image
+                            src={thumbnailUrl}
+                            alt={article.title}
+                            fill
+                            className="object-cover transition-transform duration-[1s] group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-200" />
+                        )}
+                        <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2.5rem]" />
+                      </div>
+                      
+                      <div className="flex-grow flex flex-col px-2">
+                        <div className="mb-4">
+                          <time className="text-[9px] font-black text-slate-400 uppercase tracking-[0.25em]" suppressHydrationWarning>
+                            {new Date(article.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </time>
                         </div>
                         
-                        {/* Content */}
-                        <div className="p-6 space-y-3">
-                          <time className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-                            {date}
-                          </time>
-                          <h3 className="text-xl font-bold text-gray-900 leading-snug group-hover:text-primary transition-colors line-clamp-2">
-                            {article.title || 'Untitled'}
-                          </h3>
-                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                            {article.shortDescription || 'No description available.'}
-                          </p>
-                          <div className="flex items-center text-primary text-sm font-semibold pt-2">
-                            <span>Read More</span>
-                            <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </article>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-[1.2] group-hover:text-primary transition-colors mb-4 tracking-tight">
+                          {article.title}
+                        </h3>
+                        
+                        <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed line-clamp-3 mb-6 font-medium">
+                          {article.shortDescription}
+                        </p>
+                      </div>
                     </Link>
                   );
                 })}
-              </div>
+              </section>
             )}
-          </>
+            
+          </div>
         )}
       </div>
     </div>
